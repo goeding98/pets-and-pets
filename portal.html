@@ -7,16 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root{
-      --blue:#316d74;--teal:#99b2aa;--brown:#a6785b;
-      --cream:#f9e7d4;--warm:#f8d8b6;--dark:#1c3b3f;
-      --text:#2d3a3c;--muted:#6b8a8e;--white:#fff;--red:#c0392b;
-    }
+    :root{--blue:#316d74;--teal:#99b2aa;--brown:#a6785b;--cream:#f9e7d4;--warm:#f8d8b6;--dark:#1c3b3f;--text:#2d3a3c;--muted:#6b8a8e;--white:#fff;--red:#c0392b;}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);min-height:100vh}
     nav{background:var(--dark);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
-    nav span{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:white}
+    nav a{text-decoration:none;cursor:pointer}
     .nav-right{display:flex;align-items:center;gap:16px}
     .nav-user{font-size:14px;color:rgba(255,255,255,.6)}
     .btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:none;padding:8px 16px;border-radius:100px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
@@ -39,43 +35,43 @@
     .portal-header .greeting{font-family:'Fraunces',serif;font-size:36px;font-weight:300;color:var(--dark);margin-bottom:4px}
     .portal-header .greeting em{font-style:italic;color:var(--blue)}
     .portal-header .sub{font-size:15px;color:var(--muted)}
-    .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
-    .empty-state .icon{font-size:48px;margin-bottom:16px}
-    .empty-state p{font-size:15px;line-height:1.6}
+    .empty-state{text-align:center;padding:60px 24px;color:var(--muted)}
+    .empty-state .icon{font-size:64px;margin-bottom:20px}
+    .empty-state p{font-size:16px;line-height:1.8;margin-bottom:30px}
+    .empty-state .btn-whatsapp{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:white;padding:14px 28px;border-radius:100px;text-decoration:none;font-weight:500;transition:background .2s}
+    .empty-state .btn-whatsapp:hover{background:#20ba61}
   </style>
 </head>
 <body>
+  <!-- NAV -->
   <nav>
-    <span>Pets & Pets</span>
+    <a href="https://pets-and-pets.vercel.app/" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:white;font-family:'Fraunces',serif;font-size:22px;font-weight:300;letter-spacing:1px">
+      Pets &amp; Pets
+    </a>
     <div class="nav-right">
       <span class="nav-user" id="navUser"></span>
       <button class="btn-logout" id="btnLogout" onclick="logout()" style="display:none">Salir</button>
     </div>
   </nav>
 
-  <!-- AUTH SCREEN (VISIBLE POR DEFECTO) -->
+  <!-- AUTH SCREEN -->
   <div class="auth-screen" id="authScreen">
     <div class="auth-card">
-      <h1 class="auth-title">Bienvenido a <em>Pets & Pets</em></h1>
+      <h1 class="auth-title">Bienvenido a <em>Pets &amp; Pets</em></h1>
       <p class="auth-sub">Tu portal veterinario. Accede con tu cédula para ver el historial de tu mascota.</p>
       <div class="error-msg" id="errorMsg"></div>
       
       <div class="form-group">
         <label>Cédula de ciudadanía</label>
-        <input type="text" id="cedulaInput" placeholder="p.ej. 1234567890" inputmode="numeric"/>
-      </div>
-      
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="emailInput" placeholder="tu@email.com"/>
+        <input type="text" id="cedulaInput" placeholder="p.ej. 1234567890" inputmode="numeric" autocomplete="off"/>
       </div>
       
       <div class="form-group">
         <label>Contraseña</label>
-        <input type="password" id="passwordInput" placeholder="Mín. 6 caracteres"/>
+        <input type="password" id="passwordInput" placeholder="Mín. 6 caracteres" autocomplete="off"/>
       </div>
       
-      <button class="btn-primary" onclick="handleLogin()">Entrar al portal</button>
+      <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Entrar al portal</button>
     </div>
   </div>
 
@@ -85,16 +81,10 @@
       <h1 class="greeting">Hola, <em id="userName">usuario</em></h1>
       <p class="sub">Tu historial médico veterinario en un solo lugar</p>
     </div>
-    <div id="portalContent">
-      <div class="empty-state">
-        <div class="icon">🐾</div>
-        <p>Portal cargando...</p>
-      </div>
-    </div>
+    <div id="portalContent"></div>
   </div>
 
   <script>
-    // CONFIG
     const supabaseUrl = 'https://oifuvrcfqlknwyipfnxk.supabase.co';
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pZnV2cmNmcWxrbnd5aXBmbnhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjM0NTgsImV4cCI6MjA4OTc5OTQ1OH0.GNcmlYgFlJHlGGnngz3oQm33iTdx9f9_hMo4Dl2ZpAY';
     const sb = supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -116,21 +106,19 @@
     async function handleLogin() {
       hideError();
       const cedula = document.getElementById('cedulaInput').value.trim();
-      const email = document.getElementById('emailInput').value.trim();
       const password = document.getElementById('passwordInput').value;
 
       if (!cedula || cedula.length < 5) return showError('Ingresa una cédula válida.');
-      if (!email) return showError('Ingresa un email válido.');
       if (password.length < 6) return showError('La contraseña debe tener mín. 6 caracteres.');
 
-      const btn = event.target;
+      const btn = document.getElementById('loginBtn');
       btn.disabled = true;
       btn.textContent = 'Entrando...';
 
-      // Intentar login primero
+      const email = cedulaToEmail(cedula);
+
       let { data, error } = await sb.auth.signInWithPassword({ email, password });
 
-      // Si falla, intentar signup
       if (error) {
         ({ data, error } = await sb.auth.signUp({ email, password }));
         if (error) {
@@ -139,7 +127,6 @@
           btn.textContent = 'Entrar al portal';
           return;
         }
-        // Crear perfil si es signup
         if (data.user) {
           await sb.from('perfiles').upsert({
             id: data.user.id,
@@ -160,19 +147,100 @@
       document.getElementById('portalScreen').style.display = 'none';
       document.getElementById('btnLogout').style.display = 'none';
       document.getElementById('cedulaInput').value = '';
-      document.getElementById('emailInput').value = '';
       document.getElementById('passwordInput').value = '';
+      hideError();
     }
 
-    // Listener para cambios de sesión
+    async function loadPortal(user) {
+      try {
+        const { data: perfil } = await sb
+          .from('perfiles')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle();
+
+        const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
+        document.getElementById('userName').textContent = nombre;
+
+        const cedula = perfil?.cedula;
+        if (!cedula) {
+          renderEmptyState();
+          return;
+        }
+
+        const { data: mascotas } = await sb
+          .from('mascotas')
+          .select('*')
+          .eq('cedula_dueño', cedula);
+
+        if (!mascotas || mascotas.length === 0) {
+          renderEmptyState();
+        } else {
+          renderPortal(mascotas);
+        }
+      } catch (e) {
+        console.error('Error cargando portal:', e);
+        renderEmptyState();
+      }
+    }
+
+    function renderEmptyState() {
+      const cont = document.getElementById('portalContent');
+      cont.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🐾</div>
+          <p><strong>Bienvenido a Pets & Pets</strong></p>
+          <p>Aún no hay mascotas registradas en tu perfil.<br/>
+          Acércate a nuestra veterinaria para recibir tu primera atención y vincular tu historial clínico.</p>
+          <a href="https://wa.me/576012345678" class="btn-whatsapp">
+            💬 Contactar por WhatsApp
+          </a>
+        </div>`;
+    }
+
+    function renderPortal(mascotas) {
+      const cont = document.getElementById('portalContent');
+      const emojiMap = { 'Canino': '🐕', 'Felino': '🐱', 'Otro': '🐾' };
+
+      cont.innerHTML = `
+        <p style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6b8a8e;margin-bottom:20px">Tus mascotas</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px">
+          ${mascotas.map(m => `
+            <div style="background:white;border-radius:20px;border:1px solid rgba(49,109,116,.1);overflow:hidden;cursor:pointer;transition:transform .3s,box-shadow .3s" id="card-${m.id}">
+              <div style="background:linear-gradient(135deg,#316d74 0%,#1c3b3f 100%);padding:24px;display:flex;align-items:center;gap:16px">
+                <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px">${emojiMap[m.especie] || '🐾'}</div>
+                <div>
+                  <div style="font-size:18px;font-weight:500;color:white">${m.nombre}</div>
+                  <div style="font-size:13px;color:rgba(255,255,255,.65)">${m.especie} · ${m.raza || 'Raza no especificada'}</div>
+                </div>
+              </div>
+              <div style="padding:20px">
+                <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid rgba(49,109,116,.06)">
+                  <span style="color:#6b8a8e">Sexo</span>
+                  <span style="color:#1c3b3f;font-weight:500">${m.sexo || '—'}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
+                  <span style="color:#6b8a8e">Nacimiento</span>
+                  <span style="color:#1c3b3f;font-weight:500">${m.fecha_nacimiento ? new Date(m.fecha_nacimiento).toLocaleDateString('es-CO') : '—'}</span>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>`;
+    }
+
     sb.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('portalScreen').style.display = 'block';
         document.getElementById('btnLogout').style.display = 'block';
         document.getElementById('navUser').textContent = session.user.email || '';
+        loadPortal(session.user);
       } else if (event === 'SIGNED_OUT') {
-        logout();
+        document.getElementById('authScreen').style.display = 'flex';
+        document.getElementById('portalScreen').style.display = 'none';
+        document.getElementById('btnLogout').style.display = 'none';
+        document.getElementById('navUser').textContent = '';
       }
     });
   </script>
