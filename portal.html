@@ -333,6 +333,7 @@ function cedulaToEmail(cedula) {
 }
 
 let currentCedula = '';
+let portalLoaded = false;
 
 // ── PASO 1: VERIFICAR CÉDULA ──
 async function checkCedula() {
@@ -558,9 +559,11 @@ async function selectMascota(mascotaId, cardEl) {
 
 // ── AUTH STATE LISTENER ──
 sb.auth.onAuthStateChange(async (event, session) => {
-  if (session?.user) {
+  if (session?.user && !portalLoaded) {
+    portalLoaded = true;
     await loadPortal(session.user);
-  } else {
+  } else if (!session) {
+    portalLoaded = false;
     document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
     document.getElementById('portalScreen').style.display = 'none';
     document.getElementById('btnLogout').style.display = 'none';
