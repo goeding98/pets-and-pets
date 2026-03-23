@@ -559,10 +559,10 @@ async function selectMascota(mascotaId, cardEl) {
 
 // ── AUTH STATE LISTENER ──
 sb.auth.onAuthStateChange(async (event, session) => {
-  if (session?.user && !portalLoaded) {
+  if (event === 'SIGNED_IN' && session?.user && !portalLoaded) {
     portalLoaded = true;
     await loadPortal(session.user);
-  } else if (!session) {
+  } else if (event === 'SIGNED_OUT') {
     portalLoaded = false;
     document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
     document.getElementById('portalScreen').style.display = 'none';
@@ -570,6 +570,16 @@ sb.auth.onAuthStateChange(async (event, session) => {
     document.getElementById('navUser').textContent = '';
   }
 });
+
+// ── VERIFICAR SESION ACTIVA AL CARGAR ──
+// Esto maneja el caso de volver al portal con sesion ya existente
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user && !portalLoaded) {
+    portalLoaded = true;
+    await loadPortal(session.user);
+  }
+})();
 </script>
 </body>
 </html>
