@@ -333,6 +333,7 @@ function cedulaToEmail(cedula) {
 }
 
 let currentCedula = '';
+let portalLoaded = false;
 
 // ── PASO 1: VERIFICAR CÉDULA ──
 async function checkCedula() {
@@ -346,22 +347,23 @@ async function checkCedula() {
 
   currentCedula = cedula;
 
-  // Usar la función SQL cedula_existe que verifica en tabla perfiles
-  const { data, error } = await sb.rpc('cedula_existe', { cedula_input: cedula });
+  // Verificar si el usuario existe intentando login con password falso
+  // "Invalid login credentials" = existe pero password malo → pedir contraseña
+  // Cualquier otro error o email no encontrado = nuevo usuario → crear contraseña
+  const email = cedulaToEmail(cedula);
+  const { error: loginError } = await sb.auth.signInWithPassword({ email, password: '__check__' });
 
   btn.disabled = false; btn.textContent = 'Continuar';
 
-  if (error) {
-    showError('step1Error', 'Error de conexión. Intenta de nuevo.');
-    return;
-  }
+  const existe = loginError?.message?.includes('Invalid login credentials') ||
+                 loginError?.message?.includes('Email not confirmed');
 
-  if (data === true) {
-    // Cédula encontrada → tiene cuenta → pedir contraseña
+  if (existe) {
+    // Usuario existe → pedir contraseña
     document.getElementById('cedulaDisplay').textContent = cedula;
     showStep('step2login');
   } else {
-    // Cédula no encontrada → primera vez → crear contraseña
+    // Usuario no existe → crear contraseña
     showStep('step2new');
   }
 }
@@ -439,17 +441,21 @@ async function loadPortal(user) {
   document.getElementById('portalScreen').style.display = 'block';
   document.getElementById('btnLogout').style.display = 'block';
 
-  // Obtener perfil
-  const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).single();
-  const nombre = perfil?.nombre_completo?.split(' ')[0] || 'usuario';
-  document.getElementById('userName').textContent = nombre;
-  document.getElementById('navUser').textContent = perfil?.email || '';
+  try {
+    const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).maybeSingle();
+    const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
+    document.getElementById('userName').textContent = nombre;
+    document.getElementById('navUser').textContent = perfil?.email || user.email || '';
 
-  // Obtener mascotas
-  const cedula = perfil?.cedula;
-  const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
+    const cedula = perfil?.cedula;
+    if (!cedula) { renderPortal([], null); return; }
 
-  renderPortal(mascotas || [], cedula);
+    const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
+    renderPortal(mascotas || [], cedula);
+  } catch(e) {
+    document.getElementById('userName').textContent = 'usuario';
+    renderPortal([], null);
+  }
 }
 
 function renderPortal(mascotas, cedula) {
@@ -553,9 +559,11 @@ async function selectMascota(mascotaId, cardEl) {
 
 // ── AUTH STATE LISTENER ──
 sb.auth.onAuthStateChange(async (event, session) => {
-  if (session?.user) {
+  if (session?.user && !portalLoaded) {
+    portalLoaded = true;
     await loadPortal(session.user);
-  } else {
+  } else if (!session) {
+    portalLoaded = false;
     document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
     document.getElementById('portalScreen').style.display = 'none';
     document.getElementById('btnLogout').style.display = 'none';
