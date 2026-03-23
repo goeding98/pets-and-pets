@@ -217,7 +217,7 @@
 <body>
   <!-- NAV -->
   <nav>
-    <span style="font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:white;letter-spacing:.5px">Pets & Pets</span>
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAA" alt="Pets & Pets" style="height:40px;filter:brightness(0) invert(1);opacity:.95"/>
     <div class="nav-right">
       <span class="nav-user" id="navUser"></span>
       <button class="btn-logout" id="btnLogout" onclick="logout()" style="display:none">Salir</button>
@@ -533,6 +533,7 @@
     }
 
     // ── AUTH STATE LISTENER ──
+    // Este listener se encarga de detectar cuando hay una sesion activa
     sb.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user && !portalLoaded) {
         portalLoaded = true;
@@ -545,16 +546,9 @@
         document.getElementById('navUser').textContent = '';
       }
     });
-
-    // ── VERIFICAR SESION ACTIVA AL CARGAR ──
-    // Esto maneja el caso de volver al portal con sesion ya existente
-    (async () => {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session?.user && !portalLoaded) {
-        portalLoaded = true;
-        await loadPortal(session.user);
-      }
-    })();
+    
+    // Mostrar el formulario de login de inmediato (no esperar getSession)
+    document.getElementById('authScreen').style.display = 'flex';
   </script>
 </body>
 </html>
