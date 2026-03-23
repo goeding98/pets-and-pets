@@ -240,55 +240,50 @@
   <div class="auth-card">
     <div class="logo"><img src="logo.png" alt="Pets & Pets"/></div>
 
-    <!-- LOGIN -->
-    <div id="loginForm">
+    <!-- PASO 1: CÉDULA -->
+    <div id="step1">
       <h2 class="auth-title">Bienvenido a tu <em>portal</em></h2>
-      <p class="auth-sub">Accede al historial clínico de tu mascota con tu correo y contraseña.</p>
-      <div class="error-msg" id="loginError"></div>
-      <div class="form-group">
-        <label>Correo electrónico</label>
-        <input type="email" id="loginEmail" placeholder="tu@correo.com"/>
-      </div>
-      <div class="form-group">
-        <label>Contraseña</label>
-        <input type="password" id="loginPassword" placeholder="••••••••"/>
-      </div>
-      <button class="btn-primary" onclick="login()">Entrar al portal</button>
-      <div class="auth-switch">
-        ¿No tienes cuenta? <a onclick="showRegister()">Regístrate aquí</a>
-      </div>
-    </div>
-
-    <!-- REGISTRO -->
-    <div id="registerForm" style="display:none">
-      <h2 class="auth-title">Crear <em>cuenta</em></h2>
-      <p class="auth-sub">Regístrate con tu número de cédula para ver el historial de tus mascotas.</p>
-      <div class="error-msg" id="registerError"></div>
-      <div class="success-msg" id="registerSuccess"></div>
-      <div class="form-group">
-        <label>Nombre completo</label>
-        <input type="text" id="regNombre" placeholder="María Fernanda López"/>
-      </div>
+      <p class="auth-sub">Ingresa tu número de cédula para acceder al historial clínico de tus mascotas.</p>
+      <div class="error-msg" id="step1Error"></div>
       <div class="form-group">
         <label>Número de cédula</label>
-        <input type="text" id="regCedula" placeholder="1234567890"/>
+        <input type="text" id="cedulaInput" placeholder="1234567890"
+          onkeydown="if(event.key==='Enter') checkCedula()"/>
+      </div>
+      <button class="btn-primary" onclick="checkCedula()">Continuar</button>
+    </div>
+
+    <!-- PASO 2A: NUEVA CONTRASEÑA (primera vez) -->
+    <div id="step2new" style="display:none">
+      <h2 class="auth-title">Crea tu <em>contraseña</em></h2>
+      <p class="auth-sub">Es tu primera vez. Elige una contraseña para acceder a tu portal en el futuro.</p>
+      <div class="error-msg" id="step2newError"></div>
+      <div class="form-group">
+        <label>Nueva contraseña</label>
+        <input type="password" id="newPassword" placeholder="Mínimo 8 caracteres"
+          onkeydown="if(event.key==='Enter') createPassword()"/>
       </div>
       <div class="form-group">
-        <label>Correo electrónico</label>
-        <input type="email" id="regEmail" placeholder="tu@correo.com"/>
+        <label>Confirmar contraseña</label>
+        <input type="password" id="newPassword2" placeholder="Repite tu contraseña"
+          onkeydown="if(event.key==='Enter') createPassword()"/>
       </div>
+      <button class="btn-primary" onclick="createPassword()">Entrar al portal</button>
+      <div class="auth-switch"><a onclick="goBack()">← Volver</a></div>
+    </div>
+
+    <!-- PASO 2B: CONTRASEÑA EXISTENTE -->
+    <div id="step2login" style="display:none">
+      <h2 class="auth-title">Ingresa tu <em>contraseña</em></h2>
+      <p class="auth-sub">Cédula: <strong id="cedulaDisplay"></strong></p>
+      <div class="error-msg" id="step2loginError"></div>
       <div class="form-group">
         <label>Contraseña</label>
-        <input type="password" id="regPassword" placeholder="Mínimo 8 caracteres"/>
+        <input type="password" id="existingPassword" placeholder="Tu contraseña"
+          onkeydown="if(event.key==='Enter') loginWithPassword()"/>
       </div>
-      <div class="form-group">
-        <label>Teléfono (opcional)</label>
-        <input type="tel" id="regTelefono" placeholder="300 123 4567"/>
-      </div>
-      <button class="btn-primary" onclick="register()">Crear cuenta</button>
-      <div class="auth-switch">
-        ¿Ya tienes cuenta? <a onclick="showLogin()">Inicia sesión</a>
-      </div>
+      <button class="btn-primary" onclick="loginWithPassword()">Entrar al portal</button>
+      <div class="auth-switch"><a onclick="goBack()">← Volver</a></div>
     </div>
   </div>
 </div>
@@ -316,86 +311,122 @@
 const { createClient } = supabase;
 const sb = createClient('https://oifuvrcfqlknwyipfnxk.supabase.co', 'sb_publishable__sNlMM962uV4L5Ru13aPlQ_DzNqcA6i');
 
-// ── AUTH TOGGLE ──
-function showRegister() {
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('registerForm').style.display = 'block';
-}
-function showLogin() {
-  document.getElementById('registerForm').style.display = 'none';
-  document.getElementById('loginForm').style.display = 'block';
-}
-
+// ── HELPERS ──
 function showError(id, msg) {
   const el = document.getElementById(id);
   el.textContent = msg; el.style.display = 'block';
 }
 function hideError(id) {
-  document.getElementById(id).style.display = 'none';
+  const el = document.getElementById(id);
+  if(el) el.style.display = 'none';
+}
+function showStep(step) {
+  ['step1','step2new','step2login'].forEach(s => {
+    document.getElementById(s).style.display = s === step ? 'block' : 'none';
+  });
+}
+function goBack() { showStep('step1'); }
+
+// Cédula genera un email interno único (Supabase requiere email)
+function cedulaToEmail(cedula) {
+  return `${cedula}@portal.petspets.co`;
 }
 
-// ── LOGIN ──
-async function login() {
-  hideError('loginError');
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  if (!email || !password) return showError('loginError', 'Por favor completa todos los campos.');
-  const btn = document.querySelector('#loginForm .btn-primary');
-  btn.disabled = true; btn.textContent = 'Entrando...';
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) {
-    showError('loginError', 'Correo o contraseña incorrectos.');
-    btn.disabled = false; btn.textContent = 'Entrar al portal';
+let currentCedula = '';
+
+// ── PASO 1: VERIFICAR CÉDULA ──
+async function checkCedula() {
+  hideError('step1Error');
+  const cedula = document.getElementById('cedulaInput').value.trim();
+  if (!cedula || !/^\d{6,12}$/.test(cedula))
+    return showError('step1Error', 'Ingresa un número de cédula válido (6 a 12 dígitos).');
+
+  const btn = document.querySelector('#step1 .btn-primary');
+  btn.disabled = true; btn.textContent = 'Verificando...';
+
+  currentCedula = cedula;
+  const email = cedulaToEmail(cedula);
+
+  // Intentar login con contraseña vacía para ver si el usuario existe
+  const { error } = await sb.auth.signInWithPassword({ email, password: '___check___' });
+
+  btn.disabled = false; btn.textContent = 'Continuar';
+
+  if (error?.message?.includes('Invalid login credentials')) {
+    // Usuario existe pero contraseña incorrecta → tiene cuenta
+    document.getElementById('cedulaDisplay').textContent = cedula;
+    showStep('step2login');
+  } else {
+    // Usuario no existe → primera vez
+    showStep('step2new');
   }
 }
 
-// ── REGISTER ──
-async function register() {
-  hideError('registerError');
-  document.getElementById('registerSuccess').style.display = 'none';
-  const nombre = document.getElementById('regNombre').value.trim();
-  const cedula = document.getElementById('regCedula').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const telefono = document.getElementById('regTelefono').value.trim();
+// ── PASO 2A: CREAR CONTRASEÑA (primera vez) ──
+async function createPassword() {
+  hideError('step2newError');
+  const pass1 = document.getElementById('newPassword').value;
+  const pass2 = document.getElementById('newPassword2').value;
 
-  if (!nombre || !cedula || !email || !password)
-    return showError('registerError', 'Por favor completa todos los campos obligatorios.');
-  if (password.length < 8)
-    return showError('registerError', 'La contraseña debe tener mínimo 8 caracteres.');
-  if (!/^\d{6,12}$/.test(cedula))
-    return showError('registerError', 'La cédula debe tener entre 6 y 12 dígitos.');
+  if (pass1.length < 8)
+    return showError('step2newError', 'La contraseña debe tener mínimo 8 caracteres.');
+  if (pass1 !== pass2)
+    return showError('step2newError', 'Las contraseñas no coinciden.');
 
-  const btn = document.querySelector('#registerForm .btn-primary');
-  btn.disabled = true; btn.textContent = 'Creando cuenta...';
+  const btn = document.querySelector('#step2new .btn-primary');
+  btn.disabled = true; btn.textContent = 'Creando acceso...';
 
-  const { data, error } = await sb.auth.signUp({ email, password });
+  const email = cedulaToEmail(currentCedula);
+  const { data, error } = await sb.auth.signUp({ email, password: pass1 });
+
   if (error) {
-    showError('registerError', error.message);
-    btn.disabled = false; btn.textContent = 'Crear cuenta';
+    if (error.message.includes('already registered')) {
+      // Ya existe, intentar login directo
+      document.getElementById('cedulaDisplay').textContent = currentCedula;
+      showStep('step2login');
+    } else {
+      showError('step2newError', 'Error al crear acceso. Intenta de nuevo.');
+    }
+    btn.disabled = false; btn.textContent = 'Entrar al portal';
     return;
   }
 
-  // Crear perfil con cédula
+  // Crear perfil en tabla perfiles
   if (data.user) {
-    await sb.from('perfiles').insert({
+    await sb.from('perfiles').upsert({
       id: data.user.id,
-      cedula,
-      nombre_completo: nombre,
-      email,
-      telefono
+      cedula: currentCedula,
+      nombre_completo: '',
+      email
     });
   }
 
-  const success = document.getElementById('registerSuccess');
-  success.textContent = '¡Cuenta creada! Revisa tu correo para confirmar tu registro.';
-  success.style.display = 'block';
-  btn.disabled = false; btn.textContent = 'Crear cuenta';
+  btn.disabled = false; btn.textContent = 'Entrar al portal';
+}
+
+// ── PASO 2B: LOGIN CON CONTRASEÑA ──
+async function loginWithPassword() {
+  hideError('step2loginError');
+  const password = document.getElementById('existingPassword').value;
+  if (!password) return showError('step2loginError', 'Ingresa tu contraseña.');
+
+  const btn = document.querySelector('#step2login .btn-primary');
+  btn.disabled = true; btn.textContent = 'Entrando...';
+
+  const email = cedulaToEmail(currentCedula);
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    showError('step2loginError', 'Contraseña incorrecta. Intenta de nuevo.');
+    btn.disabled = false; btn.textContent = 'Entrar al portal';
+  }
 }
 
 // ── LOGOUT ──
 async function logout() {
   await sb.auth.signOut();
+  showStep('step1');
+  document.getElementById('cedulaInput').value = '';
 }
 
 // ── LOAD PORTAL ──
@@ -521,7 +552,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
   if (session?.user) {
     await loadPortal(session.user);
   } else {
-    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
     document.getElementById('portalScreen').style.display = 'none';
     document.getElementById('btnLogout').style.display = 'none';
     document.getElementById('navUser').textContent = '';
