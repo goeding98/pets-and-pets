@@ -217,7 +217,7 @@
 <body>
   <!-- NAV -->
   <nav>
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 32'%3E%3Ctext x='8' y='24' font-family='Fraunces' font-size='20' font-weight='300'%3EPets%3C/text%3E%3C/svg%3E" alt="Logo"/>
+    <span style="font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:white;letter-spacing:.5px">Pets & Pets</span>
     <div class="nav-right">
       <span class="nav-user" id="navUser"></span>
       <button class="btn-logout" id="btnLogout" onclick="logout()" style="display:none">Salir</button>
@@ -338,20 +338,12 @@
       }
 
       currentCedula = cedula;
-      const email = cedulaToEmail(cedula);
-
-      // Verificar si existe usuario
-      const { data: { user } } = await sb.auth.admin.getUserById(email);
-
-      if (user) {
-        // Usuario existe → step2login
-        document.getElementById('cedulaDisplay2').textContent = cedula;
-        showStep('step2login');
-      } else {
-        // Usuario NO existe → step2new
-        document.getElementById('cedulaDisplay').textContent = cedula;
-        showStep('step2new');
-      }
+      document.getElementById('cedulaDisplay').textContent = cedula;
+      document.getElementById('cedulaDisplay2').textContent = cedula;
+      
+      // Mostrar step2new por defecto (crear cuenta o intentar login)
+      // La lógica de "usuario existe" se maneja en signup
+      showStep('step2new');
     }
 
     // ── PASO 2A: SIGNUP ──
@@ -369,14 +361,14 @@
       const { data, error } = await sb.auth.signUp({ email, password });
 
       if (error) {
-        if (error.message.includes('already registered')) {
-          // Ya existe, intentar login directo
-          document.getElementById('cedulaDisplay').textContent = currentCedula;
+        if (error.message.includes('already registered') || error.message.includes('User already exists')) {
+          // Usuario ya existe → ir a step2login
           showStep('step2login');
+          document.getElementById('existingPassword').focus();
         } else {
-          showError('step2newError', 'Error al crear acceso. Intenta de nuevo.');
+          showError('step2newError', error.message || 'Error al crear acceso. Intenta de nuevo.');
         }
-        btn.disabled = false; btn.textContent = 'Entrar al portal';
+        btn.disabled = false; btn.textContent = 'Crear acceso';
         return;
       }
 
@@ -390,7 +382,7 @@
         });
       }
 
-      btn.disabled = false; btn.textContent = 'Entrar al portal';
+      btn.disabled = false; btn.textContent = 'Crear acceso';
     }
 
     // ── PASO 2B: LOGIN CON CONTRASEÑA ──
