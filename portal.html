@@ -345,19 +345,23 @@ async function checkCedula() {
   btn.disabled = true; btn.textContent = 'Verificando...';
 
   currentCedula = cedula;
-  const email = cedulaToEmail(cedula);
 
-  // Intentar login con contraseña vacía para ver si el usuario existe
-  const { error } = await sb.auth.signInWithPassword({ email, password: '___check___' });
+  // Usar la función SQL cedula_existe que verifica en tabla perfiles
+  const { data, error } = await sb.rpc('cedula_existe', { cedula_input: cedula });
 
   btn.disabled = false; btn.textContent = 'Continuar';
 
-  if (error?.message?.includes('Invalid login credentials')) {
-    // Usuario existe pero contraseña incorrecta → tiene cuenta
+  if (error) {
+    showError('step1Error', 'Error de conexión. Intenta de nuevo.');
+    return;
+  }
+
+  if (data === true) {
+    // Cédula encontrada → tiene cuenta → pedir contraseña
     document.getElementById('cedulaDisplay').textContent = cedula;
     showStep('step2login');
   } else {
-    // Usuario no existe → primera vez
+    // Cédula no encontrada → primera vez → crear contraseña
     showStep('step2new');
   }
 }
