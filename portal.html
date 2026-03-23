@@ -117,24 +117,13 @@
 
       const email = cedulaToEmail(cedula);
 
-      let { data, error } = await sb.auth.signInWithPassword({ email, password });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
 
       if (error) {
-        ({ data, error } = await sb.auth.signUp({ email, password }));
-        if (error) {
-          showError(error.message || 'Error al crear/acceder.');
-          btn.disabled = false;
-          btn.textContent = 'Entrar al portal';
-          return;
-        }
-        if (data.user) {
-          await sb.from('perfiles').upsert({
-            id: data.user.id,
-            cedula: cedula,
-            nombre_completo: '',
-            email: email
-          });
-        }
+        showError('No se pudo iniciar sesión. Verifica la cédula y la contraseña.');
+        btn.disabled = false;
+        btn.textContent = 'Entrar al portal';
+        return;
       }
 
       btn.disabled = false;
@@ -153,25 +142,44 @@
 
     async function loadPortal(user) {
       try {
-        const { data: perfil } = await sb
-          .from('perfiles')
+        console.log('USER LOGUEADO:', user);
+
+        const { data: perfil, error: perfilError } = await sb
+          .from('profiles')
           .select('*')
           .eq('id', user.id)
           .maybeSingle();
 
-        const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
+        console.log('PERFIL:', perfil, perfilError);
+
+        if (perfilError) {
+          console.error('Error cargando profile:', perfilError);
+          renderEmptyState();
+          return;
+        }
+
+        const nombre = perfil?.nombre_completo?.trim()?.split(' ')[0] || 'usuario';
         document.getElementById('userName').textContent = nombre;
 
         const cedula = perfil?.cedula;
+        console.log('CEDULA DEL PERFIL:', cedula);
         if (!cedula) {
           renderEmptyState();
           return;
         }
 
-        const { data: mascotas } = await sb
+        const { data: mascotas, error: mascotasError } = await sb
           .from('mascotas')
           .select('*')
           .eq('cedula_dueño', cedula);
+
+        console.log('MASCOTAS:', mascotas, mascotasError);
+
+        if (mascotasError) {
+          console.error('Error cargando mascotas:', mascotasError);
+          renderEmptyState();
+          return;
+        }
 
         if (!mascotas || mascotas.length === 0) {
           renderEmptyState();
