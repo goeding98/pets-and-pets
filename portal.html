@@ -439,17 +439,22 @@ async function loadPortal(user) {
   document.getElementById('portalScreen').style.display = 'block';
   document.getElementById('btnLogout').style.display = 'block';
 
-  // Obtener perfil
-  const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).single();
-  const nombre = perfil?.nombre_completo?.split(' ')[0] || 'usuario';
-  document.getElementById('userName').textContent = nombre;
-  document.getElementById('navUser').textContent = perfil?.email || '';
+  try {
+    const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).single();
+    const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
+    document.getElementById('userName').textContent = nombre;
+    document.getElementById('navUser').textContent = perfil?.email || user.email || '';
 
-  // Obtener mascotas
-  const cedula = perfil?.cedula;
-  const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
+    const cedula = perfil?.cedula;
+    if (!cedula) { renderPortal([], null); return; }
 
-  renderPortal(mascotas || [], cedula);
+    const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
+    renderPortal(mascotas || [], cedula);
+
+  } catch (e) {
+    document.getElementById('userName').textContent = 'usuario';
+    renderPortal([], null);
+  }
 }
 
 function renderPortal(mascotas, cedula) {
