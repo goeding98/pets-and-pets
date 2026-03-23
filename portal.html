@@ -15,273 +15,67 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);min-height:100vh}
-
-    /* NAV */
-    nav{
-      background:var(--dark);height:68px;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:0 32px;position:sticky;top:0;z-index:100;
-    }
-    nav img{height:32px;filter:brightness(0) invert(1);opacity:.9}
+    nav{background:var(--dark);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
+    nav span{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:white}
     .nav-right{display:flex;align-items:center;gap:16px}
     .nav-user{font-size:14px;color:rgba(255,255,255,.6)}
-    .btn-logout{
-      background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);
-      border:none;padding:8px 16px;border-radius:100px;
-      font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;
-      transition:background .2s;
-    }
+    .btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:none;padding:8px 16px;border-radius:100px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
     .btn-logout:hover{background:rgba(255,255,255,.2)}
-
-    /* AUTH SCREEN */
-    .auth-screen{
-      min-height:calc(100vh - 68px);
-      display:flex;align-items:center;justify-content:center;
-      padding:40px 20px;
-    }
-    .auth-card{
-      background:white;border-radius:24px;
-      padding:48px 40px;width:100%;max-width:440px;
-      box-shadow:0 8px 48px rgba(49,109,116,.12);
-    }
-    .auth-card .logo{
-      display:flex;justify-content:center;margin-bottom:32px;
-    }
-    .auth-card .logo img{height:36px}
-    .auth-title{
-      font-family:'Fraunces',serif;font-size:28px;font-weight:300;
-      color:var(--dark);text-align:center;margin-bottom:8px;
-    }
+    .auth-screen{min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+    .auth-card{background:white;border-radius:24px;padding:48px 40px;width:100%;max-width:440px;box-shadow:0 8px 48px rgba(49,109,116,.12)}
+    .auth-title{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:var(--dark);text-align:center;margin-bottom:8px}
     .auth-title em{font-style:italic;color:var(--blue)}
     .auth-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:32px;line-height:1.6}
     .form-group{margin-bottom:20px}
-    .form-group label{
-      display:block;font-size:13px;font-weight:500;
-      color:var(--dark);margin-bottom:6px;
-    }
-    .form-group input{
-      width:100%;padding:12px 16px;
-      border:1.5px solid rgba(49,109,116,.2);border-radius:12px;
-      font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);
-      outline:none;transition:border-color .2s;background:white;
-    }
+    .form-group label{display:block;font-size:13px;font-weight:500;color:var(--dark);margin-bottom:6px}
+    .form-group input{width:100%;padding:12px 16px;border:1.5px solid rgba(49,109,116,.2);border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border-color .2s;background:white}
     .form-group input:focus{border-color:var(--blue)}
-    .btn-primary{
-      width:100%;padding:14px;
-      background:var(--blue);color:white;
-      border:none;border-radius:12px;
-      font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;
-      cursor:pointer;transition:background .2s;margin-top:8px;
-    }
+    .btn-primary{width:100%;padding:14px;background:var(--blue);color:white;border:none;border-radius:12px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .2s;margin-top:8px}
     .btn-primary:hover{background:var(--dark)}
     .btn-primary:disabled{opacity:.6;cursor:not-allowed}
-    .auth-switch{
-      text-align:center;margin-top:20px;
-      font-size:14px;color:var(--muted);
-    }
-    .auth-switch a{color:var(--blue);cursor:pointer;text-decoration:none;font-weight:500}
-    .auth-switch a:hover{text-decoration:underline}
-    .error-msg{
-      background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);
-      color:var(--red);padding:12px 16px;border-radius:10px;
-      font-size:13px;margin-bottom:16px;display:none;
-    }
-    .success-msg{
-      background:rgba(49,109,116,.08);border:1px solid rgba(49,109,116,.2);
-      color:var(--blue);padding:12px 16px;border-radius:10px;
-      font-size:13px;margin-bottom:16px;display:none;
-    }
-
-    /* PORTAL SCREEN */
+    .error-msg{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);color:var(--red);padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
     .portal-screen{display:none;padding:40px 32px;max-width:1100px;margin:0 auto}
     .portal-header{margin-bottom:40px}
-    .portal-header .greeting{
-      font-family:'Fraunces',serif;font-size:36px;font-weight:300;
-      color:var(--dark);margin-bottom:4px;
-    }
+    .portal-header .greeting{font-family:'Fraunces',serif;font-size:36px;font-weight:300;color:var(--dark);margin-bottom:4px}
     .portal-header .greeting em{font-style:italic;color:var(--blue)}
     .portal-header .sub{font-size:15px;color:var(--muted)}
-
-    /* MASCOTAS */
-    .section-title{
-      font-size:12px;font-weight:700;letter-spacing:.12em;
-      text-transform:uppercase;color:var(--muted);margin-bottom:20px;
-    }
-    .mascotas-grid{
-      display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-      gap:20px;margin-bottom:48px;
-    }
-    .mascota-card{
-      background:white;border-radius:20px;
-      border:1px solid rgba(49,109,116,.1);
-      overflow:hidden;cursor:pointer;
-      transition:transform .3s,box-shadow .3s;
-    }
-    .mascota-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(49,109,116,.12)}
-    .mascota-card.active{border-color:var(--blue);box-shadow:0 0 0 3px rgba(49,109,116,.15)}
-    .mascota-header{
-      background:linear-gradient(135deg,var(--blue) 0%,var(--dark) 100%);
-      padding:24px;display:flex;align-items:center;gap:16px;
-    }
-    .mascota-avatar{
-      width:52px;height:52px;border-radius:50%;
-      background:rgba(255,255,255,.2);
-      display:flex;align-items:center;justify-content:center;font-size:24px;
-    }
-    .mascota-name{font-size:18px;font-weight:500;color:white}
-    .mascota-info{font-size:13px;color:rgba(255,255,255,.65)}
-    .mascota-body{padding:20px}
-    .mascota-stat{
-      display:flex;justify-content:space-between;
-      font-size:13px;padding:8px 0;
-      border-bottom:1px solid rgba(49,109,116,.06);
-    }
-    .mascota-stat:last-child{border-bottom:none}
-    .mascota-stat .lbl{color:var(--muted)}
-    .mascota-stat .val{color:var(--dark);font-weight:500}
-
-    /* HISTORIAL */
-    .historial-section{
-      background:white;border-radius:20px;
-      border:1px solid rgba(49,109,116,.1);
-      padding:32px;margin-bottom:32px;
-    }
-    .historial-section h3{
-      font-family:'Fraunces',serif;font-size:22px;font-weight:300;
-      color:var(--dark);margin-bottom:20px;
-    }
-    .consulta-item{
-      padding:20px 0;border-bottom:1px solid rgba(49,109,116,.08);
-      display:grid;grid-template-columns:120px 1fr;gap:20px;
-    }
-    .consulta-item:last-child{border-bottom:none}
-    .consulta-fecha{
-      font-family:'Fraunces',serif;font-size:14px;
-      color:var(--muted);font-weight:300;
-    }
-    .consulta-diagnostico{font-size:15px;font-weight:500;color:var(--dark);margin-bottom:4px}
-    .consulta-detalle{font-size:13px;color:var(--muted);line-height:1.6}
-    .consulta-badges{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-    .badge{
-      font-size:11px;font-weight:600;letter-spacing:.08em;
-      padding:3px 10px;border-radius:100px;
-    }
-    .badge.sede{background:rgba(49,109,116,.1);color:var(--blue)}
-    .badge.vet{background:rgba(166,120,91,.1);color:var(--brown)}
-    .badge.peso{background:rgba(153,178,170,.2);color:var(--dark)}
-
-    /* VACUNAS */
-    .vacuna-item{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px 0;border-bottom:1px solid rgba(49,109,116,.06);
-    }
-    .vacuna-item:last-child{border-bottom:none}
-    .vacuna-nombre{font-size:14px;font-weight:500;color:var(--dark)}
-    .vacuna-fecha{font-size:12px;color:var(--muted)}
-    .vacuna-proxima{
-      font-size:12px;font-weight:600;padding:4px 10px;border-radius:100px;
-    }
-    .vacuna-proxima.pronto{background:rgba(241,196,15,.15);color:#c8900a}
-    .vacuna-proxima.ok{background:rgba(39,174,96,.1);color:#27ae60}
-
-    /* EMPTY STATE */
-    .empty-state{
-      text-align:center;padding:48px 24px;color:var(--muted);
-    }
+    .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
     .empty-state .icon{font-size:48px;margin-bottom:16px}
     .empty-state p{font-size:15px;line-height:1.6}
-
-    /* LOADING */
-    .loading{
-      display:flex;align-items:center;justify-content:center;
-      padding:48px;color:var(--muted);font-size:14px;gap:12px;
-    }
-    .spinner{
-      width:20px;height:20px;border:2px solid rgba(49,109,116,.2);
-      border-top-color:var(--blue);border-radius:50%;
-      animation:spin .8s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* RESPONSIVE */
-    @media (max-width:768px) {
-      nav{padding:0 16px}
-      .auth-card{padding:32px 24px}
-      .portal-screen{padding:20px 16px}
-      .portal-header .greeting{font-size:28px}
-      .mascotas-grid{grid-template-columns:1fr}
-      .consulta-item{grid-template-columns:1fr}
-    }
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <nav>
-    <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:white;letter-spacing:.5px">Pets & Pets</span>
+    <span>Pets & Pets</span>
     <div class="nav-right">
       <span class="nav-user" id="navUser"></span>
       <button class="btn-logout" id="btnLogout" onclick="logout()" style="display:none">Salir</button>
     </div>
   </nav>
 
-  <!-- AUTH SCREEN -->
+  <!-- AUTH SCREEN (VISIBLE POR DEFECTO) -->
   <div class="auth-screen" id="authScreen">
     <div class="auth-card">
-      <div class="logo">
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="18" cy="18" r="17" fill="#316d74" stroke="#1c3b3f" stroke-width="2"/>
-          <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-size="20" fill="white" font-weight="500">🐾</text>
-        </svg>
-      </div>
       <h1 class="auth-title">Bienvenido a <em>Pets & Pets</em></h1>
       <p class="auth-sub">Tu portal veterinario. Accede con tu cédula para ver el historial de tu mascota.</p>
-
-      <!-- STEP 1: CEDULA -->
-      <div id="step1">
-        <div class="error-msg" id="step1Error"></div>
-        <div class="form-group">
-          <label>Cédula de ciudadanía</label>
-          <input type="text" id="cedulaInput" placeholder="p.ej. 1234567890" inputmode="numeric"/>
-        </div>
-        <button class="btn-primary" onclick="handleCedula()">Continuar</button>
+      <div class="error-msg" id="errorMsg"></div>
+      
+      <div class="form-group">
+        <label>Cédula de ciudadanía</label>
+        <input type="text" id="cedulaInput" placeholder="p.ej. 1234567890" inputmode="numeric"/>
       </div>
-
-      <!-- STEP 2A: NEW USER (CREATE ACCOUNT) -->
-      <div id="step2new" style="display:none">
-        <div class="error-msg" id="step2newError"></div>
-        <div class="success-msg" id="step2newSuccess"></div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:20px">
-          Cédula: <strong id="cedulaDisplay"></strong>
-        </p>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="newEmail" placeholder="tu@email.com"/>
-        </div>
-        <div class="form-group">
-          <label>Crear una contraseña</label>
-          <input type="password" id="newPassword" placeholder="Mín. 6 caracteres"/>
-        </div>
-        <button class="btn-primary" onclick="signupNewUser()">Crear acceso</button>
-        <div class="auth-switch">
-          <a onclick="showStep('step1')">← Volver</a>
-        </div>
+      
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="emailInput" placeholder="tu@email.com"/>
       </div>
-
-      <!-- STEP 2B: EXISTING USER (LOGIN) -->
-      <div id="step2login" style="display:none">
-        <div class="error-msg" id="step2loginError"></div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:20px">
-          Cédula: <strong id="cedulaDisplay2"></strong>
-        </p>
-        <div class="form-group">
-          <label>Contraseña</label>
-          <input type="password" id="existingPassword" placeholder="Tu contraseña"/>
-        </div>
-        <button class="btn-primary" onclick="loginWithPassword()">Entrar al portal</button>
-        <div class="auth-switch">
-          <a onclick="showStep('step1')">← Volver</a>
-        </div>
+      
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="passwordInput" placeholder="Mín. 6 caracteres"/>
       </div>
+      
+      <button class="btn-primary" onclick="handleLogin()">Entrar al portal</button>
     </div>
   </div>
 
@@ -291,264 +85,96 @@
       <h1 class="greeting">Hola, <em id="userName">usuario</em></h1>
       <p class="sub">Tu historial médico veterinario en un solo lugar</p>
     </div>
-    <div id="portalContent" class="loading">
-      <div class="spinner"></div>
-      Hola, cargando...
+    <div id="portalContent">
+      <div class="empty-state">
+        <div class="icon">🐾</div>
+        <p>Portal cargando...</p>
+      </div>
     </div>
   </div>
 
   <script>
-    // ── CONFIG ──
+    // CONFIG
     const supabaseUrl = 'https://oifuvrcfqlknwyipfnxk.supabase.co';
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pZnV2cmNmcWxrbnd5aXBmbnhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjM0NTgsImV4cCI6MjA4OTc5OTQ1OH0.GNcmlYgFlJHlGGnngz3oQm33iTdx9f9_hMo4Dl2ZpAY';
     const sb = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-    let currentCedula = '';
-    let portalLoaded = false;
-
-    // ── HELPER: CEDULA -> EMAIL ──
-    function cedulaToEmail(cedula) {
-      return `${cedula}@pets-and-pets.local`;
-    }
-
-    // ── STEP DISPLAY ──
-    function showStep(stepId) {
-      ['step1', 'step2new', 'step2login'].forEach(id => {
-        document.getElementById(id).style.display = id === stepId ? 'block' : 'none';
-      });
-    }
-
-    function showError(elemId, msg) {
-      const el = document.getElementById(elemId);
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
       el.textContent = msg;
       el.style.display = 'block';
     }
 
-    function hideError(elemId) {
-      document.getElementById(elemId).style.display = 'none';
+    function hideError() {
+      document.getElementById('errorMsg').style.display = 'none';
     }
 
-    // ── PASO 1: CEDULA INPUT ──
-    async function handleCedula() {
-      hideError('step1Error');
+    function cedulaToEmail(cedula) {
+      return `${cedula}@pets-and-pets.local`;
+    }
+
+    async function handleLogin() {
+      hideError();
       const cedula = document.getElementById('cedulaInput').value.trim();
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
 
-      if (!cedula || cedula.length < 5) {
-        return showError('step1Error', 'Ingresa una cédula válida.');
-      }
+      if (!cedula || cedula.length < 5) return showError('Ingresa una cédula válida.');
+      if (!email) return showError('Ingresa un email válido.');
+      if (password.length < 6) return showError('La contraseña debe tener mín. 6 caracteres.');
 
-      currentCedula = cedula;
-      document.getElementById('cedulaDisplay').textContent = cedula;
-      document.getElementById('cedulaDisplay2').textContent = cedula;
-      
-      // Mostrar step2new por defecto (crear cuenta o intentar login)
-      // La lógica de "usuario existe" se maneja en signup
-      showStep('step2new');
-    }
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
 
-    // ── PASO 2A: SIGNUP ──
-    async function signupNewUser() {
-      hideError('step2newError');
-      const email = document.getElementById('newEmail').value.trim();
-      const password = document.getElementById('newPassword').value;
+      // Intentar login primero
+      let { data, error } = await sb.auth.signInWithPassword({ email, password });
 
-      if (!email) return showError('step2newError', 'Ingresa un email válido.');
-      if (password.length < 6) return showError('step2newError', 'La contraseña debe tener mín. 6 caracteres.');
-
-      const btn = document.querySelector('#step2new .btn-primary');
-      btn.disabled = true; btn.textContent = 'Creando acceso...';
-
-      const { data, error } = await sb.auth.signUp({ email, password });
-
+      // Si falla, intentar signup
       if (error) {
-        if (error.message.includes('already registered') || error.message.includes('User already exists')) {
-          // Usuario ya existe → ir a step2login
-          showStep('step2login');
-          document.getElementById('existingPassword').focus();
-        } else {
-          showError('step2newError', error.message || 'Error al crear acceso. Intenta de nuevo.');
+        ({ data, error } = await sb.auth.signUp({ email, password }));
+        if (error) {
+          showError(error.message || 'Error al crear/acceder.');
+          btn.disabled = false;
+          btn.textContent = 'Entrar al portal';
+          return;
         }
-        btn.disabled = false; btn.textContent = 'Crear acceso';
-        return;
+        // Crear perfil si es signup
+        if (data.user) {
+          await sb.from('perfiles').upsert({
+            id: data.user.id,
+            cedula: cedula,
+            nombre_completo: '',
+            email: email
+          });
+        }
       }
 
-      // Crear perfil en tabla perfiles
-      if (data.user) {
-        await sb.from('perfiles').upsert({
-          id: data.user.id,
-          cedula: currentCedula,
-          nombre_completo: '',
-          email
-        });
-      }
-
-      btn.disabled = false; btn.textContent = 'Crear acceso';
+      btn.disabled = false;
+      btn.textContent = 'Entrar al portal';
     }
 
-    // ── PASO 2B: LOGIN CON CONTRASEÑA ──
-    async function loginWithPassword() {
-      hideError('step2loginError');
-      const password = document.getElementById('existingPassword').value;
-      if (!password) return showError('step2loginError', 'Ingresa tu contraseña.');
-
-      const btn = document.querySelector('#step2login .btn-primary');
-      btn.disabled = true; btn.textContent = 'Entrando...';
-
-      const email = cedulaToEmail(currentCedula);
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        showError('step2loginError', 'Contraseña incorrecta. Intenta de nuevo.');
-        btn.disabled = false; btn.textContent = 'Entrar al portal';
-      }
-    }
-
-    // ── LOGOUT ──
     async function logout() {
       await sb.auth.signOut();
-      showStep('step1');
+      document.getElementById('authScreen').style.display = 'flex';
+      document.getElementById('portalScreen').style.display = 'none';
+      document.getElementById('btnLogout').style.display = 'none';
       document.getElementById('cedulaInput').value = '';
+      document.getElementById('emailInput').value = '';
+      document.getElementById('passwordInput').value = '';
     }
 
-    // ── LOAD PORTAL ──
-    async function loadPortal(user) {
-      document.getElementById('authScreen').style.display = 'none';
-      document.getElementById('portalScreen').style.display = 'block';
-      document.getElementById('btnLogout').style.display = 'block';
-
-      try {
-        const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).maybeSingle();
-        const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
-        document.getElementById('userName').textContent = nombre;
-        document.getElementById('navUser').textContent = perfil?.email || user.email || '';
-
-        const cedula = perfil?.cedula;
-        if (!cedula) { renderPortal([], null); return; }
-
-        const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
-        renderPortal(mascotas || [], cedula);
-      } catch(e) {
-        document.getElementById('userName').textContent = 'usuario';
-        renderPortal([], null);
-      }
-    }
-
-    function renderPortal(mascotas, cedula) {
-      const cont = document.getElementById('portalContent');
-
-      if (mascotas.length === 0) {
-        cont.innerHTML = `
-          <div class="empty-state">
-            <div class="icon">🐾</div>
-            <p>Aún no hay mascotas registradas a tu cédula.<br/>
-            Si ya has visitado Pets & Pets, contactanos para vincular tu historial.</p>
-            <a href="https://wa.me/576012345678" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#25D366;color:white;padding:12px 24px;border-radius:100px;text-decoration:none;font-weight:500">
-              💬 Contactar por WhatsApp
-            </a>
-          </div>`;
-        return;
-      }
-
-      const emojiMap = { 'Canino': '🐕', 'Felino': '🐱', 'Otro': '🐾' };
-
-      cont.innerHTML = `
-        <p class="section-title">Tus mascotas</p>
-        <div class="mascotas-grid" id="mascotasGrid">
-          ${mascotas.map(m => `
-            <div class="mascota-card" onclick="selectMascota('${m.id}', this)" id="card-${m.id}">
-              <div class="mascota-header">
-                <div class="mascota-avatar">${emojiMap[m.especie] || '🐾'}</div>
-                <div>
-                  <div class="mascota-name">${m.nombre}</div>
-                  <div class="mascota-info">${m.especie} · ${m.raza || 'Raza no especificada'}</div>
-                </div>
-              </div>
-              <div class="mascota-body">
-                <div class="mascota-stat"><span class="lbl">Sexo</span><span class="val">${m.sexo || '—'}</span></div>
-                <div class="mascota-stat"><span class="lbl">Nacimiento</span><span class="val">${m.fecha_nacimiento ? new Date(m.fecha_nacimiento).toLocaleDateString('es-CO') : '—'}</span></div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-        <div id="historialContainer"></div>`;
-
-      // Auto-seleccionar primera mascota
-      if (mascotas.length > 0) selectMascota(mascotas[0].id, document.getElementById('card-' + mascotas[0].id));
-    }
-
-    async function selectMascota(mascotaId, cardEl) {
-      // Highlight
-      document.querySelectorAll('.mascota-card').forEach(c => c.classList.remove('active'));
-      if (cardEl) cardEl.classList.add('active');
-
-      const cont = document.getElementById('historialContainer');
-      cont.innerHTML = '<div class="loading"><div class="spinner"></div> Cargando historial...</div>';
-
-      const [{ data: consultas }, { data: vacunas }] = await Promise.all([
-        sb.from('consultas').select('*').eq('mascota_id', mascotaId).order('fecha', { ascending: false }),
-        sb.from('vacunas').select('*').eq('mascota_id', mascotaId).order('fecha_aplicacion', { ascending: false })
-      ]);
-
-      const hoy = new Date();
-
-      cont.innerHTML = `
-        <div class="historial-section">
-          <h3>Historial de consultas</h3>
-          ${consultas && consultas.length > 0 ? consultas.map(c => `
-            <div class="consulta-item">
-              <div class="consulta-fecha">${new Date(c.fecha).toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'})}</div>
-              <div>
-                <div class="consulta-diagnostico">${c.diagnostico || c.motivo || 'Consulta general'}</div>
-                ${c.tratamiento ? `<div class="consulta-detalle">Tratamiento: ${c.tratamiento}</div>` : ''}
-                ${c.observaciones ? `<div class="consulta-detalle">${c.observaciones}</div>` : ''}
-                <div class="consulta-badges">
-                  ${c.sede ? `<span class="badge sede">${c.sede}</span>` : ''}
-                  ${c.veterinario ? `<span class="badge vet">Dr. ${c.veterinario}</span>` : ''}
-                  ${c.peso_kg ? `<span class="badge peso">${c.peso_kg} kg</span>` : ''}
-                </div>
-              </div>
-            </div>
-          `).join('') : '<div class="empty-state"><p>No hay consultas registradas aún.</p></div>'}
-        </div>
-
-        <div class="historial-section">
-          <h3>Plan de vacunación</h3>
-          ${vacunas && vacunas.length > 0 ? vacunas.map(v => {
-            const proxima = v.fecha_proxima ? new Date(v.fecha_proxima) : null;
-            const diasRestantes = proxima ? Math.ceil((proxima - hoy) / (1000*60*60*24)) : null;
-            const estado = diasRestantes !== null
-              ? (diasRestantes <= 30 ? `<span class="vacuna-proxima pronto">Próxima: ${proxima.toLocaleDateString('es-CO')}</span>`
-              : `<span class="vacuna-proxima ok">Al día ✓</span>`)
-              : '';
-            return `
-              <div class="vacuna-item">
-                <div>
-                  <div class="vacuna-nombre">${v.nombre_vacuna}</div>
-                  <div class="vacuna-fecha">Aplicada: ${new Date(v.fecha_aplicacion).toLocaleDateString('es-CO')}</div>
-                </div>
-                ${estado}
-              </div>`;
-          }).join('') : '<div class="empty-state"><p>No hay vacunas registradas aún.</p></div>'}
-        </div>`;
-    }
-
-    // ── AUTH STATE LISTENER ──
-    // Este listener se encarga de detectar cuando hay una sesion activa
-    sb.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user && !portalLoaded) {
-        portalLoaded = true;
-        await loadPortal(session.user);
+    // Listener para cambios de sesión
+    sb.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('portalScreen').style.display = 'block';
+        document.getElementById('btnLogout').style.display = 'block';
+        document.getElementById('navUser').textContent = session.user.email || '';
       } else if (event === 'SIGNED_OUT') {
-        portalLoaded = false;
-        document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
-        document.getElementById('portalScreen').style.display = 'none';
-        document.getElementById('btnLogout').style.display = 'none';
-        document.getElementById('navUser').textContent = '';
+        logout();
       }
     });
-    
-    // Mostrar el formulario de login de inmediato (no esperar getSession)
-    document.getElementById('authScreen').style.display = 'flex';
   </script>
 </body>
 </html>
