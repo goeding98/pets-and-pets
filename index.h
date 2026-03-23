@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Pets & Pets — Clínica veterinaria de emergencias 24/7 en Cali, Colombia. Urgencias permanentes, medicina de alta complejidad y la guía clínica veterinaria más completa de Colombia."/>
+  <title>Pets & Pets — Urgencias Veterinarias 24/7 en Cali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue:  #316d74;
+      --teal:  #99b2aa;
+      --brown: #a6785b;
+      --cream: #f9e7d4;
+      --warm:  #f8d8b6;
+      --dark:  #1c3b3f;
+      --text:  #2d3a3c;
+      --muted: #6b8a8e;
+      --white: #ffffff;
+      --red:   #c0392b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    .serif { font-family: 'Fraunces', Georgia, serif; }
+
+    /* ── EMERGENCY STRIP ── */
+    .emergency-strip {
+      background: var(--red);
+      color: white;
+      text-align: center;
+      padding: 10px 32px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      position: relative;
+      z-index: 300;
+    }
+    .emergency-strip a {
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+      background: rgba(255,255,255,.2);
+      padding: 4px 14px;
+      border-radius: 100px;
+      transition: background .2s;
+    }
+    .emergency-strip a:hover { background: rgba(255,255,255,.35); }
+    .pulse-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: white;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 68px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(49,109,116,.1);
+      display: flex; align-items: center;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo img { height: 34px; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 14px; color: rgba(255,255,255,.75); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-emergency-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--red); color: white !important;
+      padding: 9px 18px; border-radius: 100px;
+      font-size: 13px; font-weight: 600 !important;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .nav-emergency-btn:hover { background: #a93226 !important; }
+    .nav-portal-btn {
+      background: var(--blue); color: white !important;
+      padding: 9px 18px; border-radius: 100px;
+      font-size: 13px; font-weight: 500 !important;
+      text-decoration: none; transition: background .2s;
+    }
+    .nav-portal-btn:hover { background: var(--dark) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: calc(100vh - 68px);
+      background: #050e0f;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .hero-photo {
+      position: absolute; inset: 0;
+      background-image: url('dog-hero.png?v=2');
+      background-size: cover;
+      background-position: center center;
+      opacity: .55;
+    }
+    .hero-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(5,14,15,.35) 0%,
+        rgba(5,14,15,.45) 40%,
+        rgba(5,14,15,.85) 85%,
+        rgba(5,14,15,1) 100%
+      );
+    }
+    /* wavy divider bottom */
+    .hero-wave {
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      line-height: 0;
+    }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center;
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      padding: 100px 32px 120px;
+      position: relative; z-index: 1;
+      flex: 1;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 500; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 20px;
+    }
+    .hero-eyebrow span { width: 28px; height: 1.5px; background: var(--teal); display: block; }
+    .hero h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(38px, 5vw, 62px);
+      font-weight: 300; line-height: 1.1; color: white;
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; color: var(--blue); }
+    .hero-desc { font-size: 17px; line-height: 1.75; color: rgba(255,255,255,.65); max-width: 460px; margin-bottom: 36px; }
+
+    /* CTA buttons */
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+    .cta-emergency {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--red); color: white;
+      padding: 14px 26px; border-radius: 100px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      box-shadow: 0 6px 24px rgba(192,57,43,.3);
+      transition: all .25s;
+    }
+    .cta-emergency:hover { background: #a93226; transform: translateY(-2px); box-shadow: 0 10px 32px rgba(192,57,43,.4); }
+    .cta-whatsapp {
+      display: flex; align-items: center; gap: 10px;
+      background: #25D366; color: white;
+      padding: 14px 26px; border-radius: 100px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      box-shadow: 0 6px 24px rgba(37,211,102,.3);
+      transition: all .25s;
+    }
+    .cta-whatsapp:hover { background: #1da851; transform: translateY(-2px); }
+    .cta-secondary {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--blue); border: 2px solid var(--blue);
+      padding: 13px 26px; border-radius: 100px;
+      font-size: 15px; font-weight: 500; text-decoration: none;
+      transition: all .25s;
+    }
+    .cta-secondary:hover { background: var(--blue); color: white; }
+
+    .hero-stats {
+      display: flex; gap: 36px;
+      padding-top: 36px; border-top: 1px solid rgba(255,255,255,.15);
+    }
+    .stat-num {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 34px; font-weight: 300; color: var(--teal); display: block;
+    }
+    .stat-label { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.4; }
+
+    /* hero visual cards */
+    .hero-visual { display: flex; flex-direction: column; gap: 16px; }
+    .hv-card {
+      background: rgba(255,255,255,.08); border-radius: 20px; padding: 24px 28px;
+      box-shadow: 0 4px 28px rgba(0,0,0,.3);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .hv-card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(49,109,116,.15); }
+    .hv-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .hv-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .hv-title { font-size: 14px; font-weight: 600; color: white; }
+    .hv-sub { font-size: 12px; color: rgba(255,255,255,.5); }
+    .hv-body { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.6; }
+    .urgency-bar { display: flex; gap: 4px; margin-top: 12px; }
+    .urg { height: 7px; border-radius: 4px; flex: 1; }
+    .urg.green{background:#27ae60} .urg.yellow{background:#f1c40f}
+    .urg.orange{background:#e67e22} .urg.red{background:#e74c3c}
+    .hv-red {
+      background: linear-gradient(135deg, var(--red) 0%, #922b21 100%);
+      color: white; border: none;
+      display: flex; align-items: center; gap: 16px; padding: 20px 24px;
+    }
+    .hv-red .hv-icon { background: rgba(255,255,255,.2); }
+    .hv-red .hv-title { color: white; }
+    .hv-red .hv-sub { color: rgba(255,255,255,.7); }
+    .hv-red-right { text-align: right; margin-left: auto; }
+    .hv-red-right .big { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 300; color: white; }
+    .hv-red-right .small { font-size: 11px; color: rgba(255,255,255,.6); }
+
+    /* ── SERVICES ── */
+    .services { padding: 100px 0; background: white; }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-tag {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--blue); background: rgba(49,109,116,.08);
+      border-radius: 100px; padding: 5px 16px; margin-bottom: 16px;
+    }
+    .section-header h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(30px, 4vw, 46px); font-weight: 300;
+      color: var(--dark); line-height: 1.2; margin-bottom: 14px;
+    }
+    .section-header h2 em { font-style: italic; color: var(--blue); }
+    .section-header p { font-size: 16px; color: var(--muted); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .svc {
+      border-radius: 28px; padding: 40px 32px;
+      position: relative; overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .svc:hover { transform: translateY(-6px); }
+    .svc::before {
+      content: ''; position: absolute;
+      top: -60px; right: -60px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      opacity: .15;
+    }
+    .svc.hospital { background: linear-gradient(145deg, var(--blue) 0%, var(--dark) 100%); }
+    .svc.hospital::before { background: white; }
+    .svc.hospital:hover { box-shadow: 0 16px 48px rgba(49,109,116,.35); }
+    .svc.wellness { background: linear-gradient(145deg, var(--cream) 0%, var(--warm) 100%); }
+    .svc.wellness::before { background: var(--brown); }
+    .svc.wellness:hover { box-shadow: 0 16px 48px rgba(166,120,91,.2); }
+    .svc.shop { background: linear-gradient(145deg, rgba(153,178,170,.18) 0%, rgba(153,178,170,.05) 100%); border: 1px solid rgba(153,178,170,.3); }
+    .svc.shop::before { background: var(--teal); }
+    .svc.shop:hover { box-shadow: 0 16px 48px rgba(153,178,170,.25); }
+    .svc-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: .15em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 24px;
+    }
+    .hospital .svc-badge { background: rgba(255,255,255,.18); color: rgba(255,255,255,.95); }
+    .wellness .svc-badge { background: rgba(166,120,91,.18); color: var(--brown); }
+    .shop .svc-badge { background: rgba(49,109,116,.12); color: var(--blue); }
+    .svc-icon { font-size: 44px; margin-bottom: 18px; display: block; }
+    .svc h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 26px; font-weight: 300; margin-bottom: 10px;
+    }
+    .hospital h3 { color: white; }
+    .wellness h3, .shop h3 { color: var(--dark); }
+    .svc p { font-size: 14px; line-height: 1.7; }
+    .hospital p { color: rgba(255,255,255,.72); }
+    .wellness p, .shop p { color: var(--muted); }
+    .svc-list { margin-top: 22px; display: flex; flex-direction: column; gap: 7px; }
+    .svc-list span { font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    .hospital .svc-list span { color: rgba(255,255,255,.8); }
+    .hospital .svc-list span::before { content: '✓'; color: var(--teal); font-weight: 700; }
+    .wellness .svc-list span, .shop .svc-list span { color: var(--muted); }
+    .wellness .svc-list span::before, .shop .svc-list span::before { content: '✓'; color: var(--blue); font-weight: 700; }
+
+    /* ── SEDES – MAYO-STYLE ── */
+    .locations {
+      padding: 0;
+      background: var(--dark);
+      position: relative; overflow: hidden;
+    }
+    .locations-top {
+      padding: 80px 0 60px;
+      text-align: center;
+      position: relative; z-index: 1;
+    }
+    .locations-top h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(30px, 4vw, 46px); font-weight: 300;
+      color: white; margin-bottom: 12px; line-height: 1.2;
+    }
+    .locations-top h2 em { font-style: italic; color: var(--teal); }
+    .locations-top p { font-size: 16px; color: rgba(255,255,255,.55); max-width: 500px; margin: 0 auto; }
+    .locations-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 0; position: relative; z-index: 1;
+    }
+    .loc-card {
+      position: relative; overflow: hidden;
+      min-height: 460px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      cursor: pointer;
+    }
+    .loc-photo {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform .6s ease;
+    }
+    .loc-card:hover .loc-photo { transform: scale(1.05); }
+    /* generic gradient placeholders per clinic */
+    .loc-photo.s1 { background: linear-gradient(160deg, #2a7a6b 0%, #1a3a3f 100%); }
+    .loc-photo.s2 { background: linear-gradient(160deg, #316d74 0%, #0e2325 100%); }
+    .loc-photo.s3 {
+      background: linear-gradient(160deg, #4a4a4a 0%, #222 100%);
+      filter: grayscale(30%);
+    }
+    .loc-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,25,28,.92) 0%, rgba(10,25,28,.3) 60%, transparent 100%);
+      transition: background .4s;
+    }
+    .loc-card:hover .loc-overlay { background: linear-gradient(to top, rgba(10,25,28,.96) 0%, rgba(10,25,28,.5) 70%, rgba(10,25,28,.1) 100%); }
+    .loc-content {
+      position: relative; z-index: 2;
+      padding: 32px;
+    }
+    .loc-status {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: .15em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 16px;
+    }
+    .loc-status.open { background: rgba(39,174,96,.25); color: #2ecc71; border: 1px solid rgba(39,174,96,.4); }
+    .loc-status.soon { background: rgba(166,120,91,.25); color: var(--warm); border: 1px solid rgba(166,120,91,.4); }
+    .loc-content h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 26px; font-weight: 300; color: white; margin-bottom: 6px;
+    }
+    .loc-address { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 20px; line-height: 1.5; }
+    .loc-details {
+      display: flex; flex-direction: column; gap: 8px;
+      max-height: 0; overflow: hidden;
+      transition: max-height .4s ease;
+    }
+    .loc-card:hover .loc-details { max-height: 200px; }
+    .loc-detail { font-size: 13px; color: rgba(255,255,255,.7); display: flex; align-items: center; gap: 8px; }
+    .loc-detail::before { content: '→'; color: var(--teal); }
+    .loc-cta-row {
+      display: flex; gap: 10px; margin-top: 16px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity .3s .1s, transform .3s .1s;
+    }
+    .loc-card:hover .loc-cta-row { opacity: 1; transform: translateY(0); }
+    .loc-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 16px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; text-decoration: none;
+      transition: all .2s;
+    }
+    .loc-btn.call { background: var(--red); color: white; }
+    .loc-btn.call:hover { background: #a93226; }
+    .loc-btn.wa { background: #25D366; color: white; }
+    .loc-btn.wa:hover { background: #1da851; }
+    /* photo placeholder icons */
+    .loc-placeholder {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-60%);
+      font-size: 80px; opacity: .12; z-index: 1;
+    }
+
+    /* ── KNOWLEDGE HUB ── */
+    .hub {
+      padding: 100px 0;
+      background: linear-gradient(180deg, #fafafa 0%, var(--cream) 100%);
+    }
+    .hub-top {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: end; margin-bottom: 48px;
+    }
+    .hub-top h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(30px, 4vw, 46px); font-weight: 300;
+      color: var(--dark); line-height: 1.2;
+    }
+    .hub-top h2 em { font-style: italic; color: var(--blue); }
+    .hub-top p { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+
+    /* A-Z INDEX – Mayo style */
+    .az-section {
+      background: white; border-radius: 20px;
+      padding: 32px; margin-bottom: 48px;
+      border: 1px solid rgba(49,109,116,.1);
+      box-shadow: 0 4px 20px rgba(49,109,116,.06);
+    }
+    .az-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .az-header h3 {
+      font-size: 14px; font-weight: 600; color: var(--dark);
+      letter-spacing: .04em;
+    }
+    .az-search {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(49,109,116,.06); border-radius: 100px;
+      padding: 9px 18px; flex: 1; max-width: 320px;
+    }
+    .az-search input {
+      border: none; background: none; outline: none;
+      font-size: 14px; color: var(--text); width: 100%;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .az-search input::placeholder { color: var(--muted); }
+    .az-letters {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px;
+    }
+    .az-letter {
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .15s;
+      color: var(--blue); background: rgba(49,109,116,.07);
+      border: none;
+    }
+    .az-letter:hover, .az-letter.active { background: var(--blue); color: white; }
+    .az-letter.disabled { color: var(--teal); opacity: .35; cursor: default; }
+    .az-results {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 6px 24px;
+    }
+    .az-item {
+      font-size: 14px; color: var(--blue); text-decoration: none;
+      padding: 5px 0; border-bottom: 1px solid rgba(49,109,116,.07);
+      transition: color .15s;
+    }
+    .az-item:hover { color: var(--dark); }
+    .az-see-all {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--blue);
+      text-decoration: none; margin-top: 18px;
+    }
+    .az-see-all::after { content: '→'; }
+
+    /* article grid */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 20px;
+    }
+    .art {
+      background: white; border-radius: 20px; overflow: hidden;
+      border: 1px solid rgba(49,109,116,.08);
+      transition: transform .3s, box-shadow .3s;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column;
+    }
+    .art:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(49,109,116,.12); }
+    .art.feat { grid-row: span 2; }
+    .art-thumb {
+      height: 180px;
+      background: linear-gradient(135deg, rgba(49,109,116,.12) 0%, rgba(153,178,170,.2) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 44px; position: relative;
+    }
+    .art.feat .art-thumb { height: 240px; font-size: 64px; }
+    .art-thumb .sptag {
+      position: absolute; top: 14px; left: 14px;
+      background: white; color: var(--blue);
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 100px;
+    }
+    .art-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+    .art-meta { font-size: 12px; color: var(--muted); margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+    .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--teal); display: inline-block; }
+    .art h3 {
+      font-family: 'Fraunces', Georgia, serif; font-weight: 300;
+      color: var(--dark); line-height: 1.3; margin-bottom: 8px;
+    }
+    .art.feat h3 { font-size: 24px; }
+    .art:not(.feat) h3 { font-size: 16px; }
+    .art p { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
+    .art-footer {
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid rgba(49,109,116,.08);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .read-more { font-size: 13px; font-weight: 500; color: var(--blue); display: flex; align-items: center; gap: 5px; }
+    .read-more::after { content: '→'; transition: transform .2s; }
+    .art:hover .read-more::after { transform: translateX(3px); }
+    .hub-footer { text-align: center; margin-top: 44px; }
+    .hub-footer p { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+
+    /* ── PORTAL ── */
+    .portal {
+      padding: 100px 0; background: var(--dark); position: relative; overflow: hidden;
+    }
+    .portal::before {
+      content: ''; position: absolute; top: -150px; right: -150px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(49,109,116,.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .portal-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .portal-text h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(28px, 3.5vw, 44px); font-weight: 300; color: white;
+      line-height: 1.2; margin-bottom: 18px;
+    }
+    .portal-text h2 em { font-style: italic; color: var(--teal); }
+    .portal-text p { font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.75; margin-bottom: 32px; }
+    .portal-feats { display: flex; flex-direction: column; gap: 18px; margin-bottom: 36px; }
+    .pfeat { display: flex; align-items: flex-start; gap: 14px; }
+    .pfeat-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(153,178,170,.15);
+      display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+    }
+    .pfeat strong { display: block; font-size: 14px; color: white; margin-bottom: 3px; }
+    .pfeat span { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.5; }
+    .portal-mockup {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 24px; padding: 8px; backdrop-filter: blur(10px);
+    }
+    .mock-in { background: rgba(255,255,255,.03); border-radius: 18px; padding: 22px; }
+    .mock-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .mock-av {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      display: flex; align-items: center; justify-content: center; font-size: 17px;
+    }
+    .mock-hd strong { display: block; font-size: 13px; color: white; }
+    .mock-hd span { font-size: 11px; color: rgba(255,255,255,.5); }
+    .mock-pets { display: flex; gap: 10px; margin-bottom: 20px; }
+    .pchip {
+      background: rgba(255,255,255,.08); border-radius: 100px;
+      padding: 7px 14px; font-size: 12px; color: rgba(255,255,255,.7);
+      display: flex; align-items: center; gap: 6px; cursor: pointer;
+      border: 1.5px solid transparent; transition: all .2s;
+    }
+    .pchip.active { border-color: var(--teal); color: var(--teal); background: rgba(153,178,170,.12); }
+    .mock-card {
+      background: rgba(255,255,255,.06); border-radius: 14px; padding: 18px; margin-bottom: 10px;
+    }
+    .mock-card-hd {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .mock-card-hd strong { font-size: 13px; color: white; }
+    .sbadge { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 100px; }
+    .sbadge.green { background: rgba(39,174,96,.2); color: #2ecc71; }
+    .sbadge.yellow { background: rgba(241,196,15,.2); color: #f1c40f; }
+    .mrow { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+    .mrow span:first-child { color: rgba(255,255,255,.4); }
+    .mrow span:last-child { color: rgba(255,255,255,.8); }
+
+    /* ── STICKY EMERGENCY BAR ── */
+    .sticky-emergency {
+      position: fixed; bottom: 24px; right: 24px; z-index: 500;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .stickyBtn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 20px; border-radius: 100px;
+      font-size: 14px; font-weight: 600; text-decoration: none;
+      box-shadow: 0 6px 24px rgba(0,0,0,.25);
+      transition: all .25s; white-space: nowrap;
+    }
+    .stickyBtn.emergency { background: var(--red); color: white; box-shadow: 0 6px 24px rgba(192,57,43,.4); }
+    .stickyBtn.emergency:hover { transform: scale(1.04); }
+    .stickyBtn.whatsapp { background: #25D366; color: white; box-shadow: 0 6px 24px rgba(37,211,102,.35); }
+    .stickyBtn.whatsapp:hover { transform: scale(1.04); }
+
+    /* ── FOOTER ── */
+    footer { background: #111e20; color: white; padding: 64px 0 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 44px; }
+    .footer-brand img { height: 30px; margin-bottom: 14px; filter: brightness(0) invert(1); opacity: .85; }
+    .footer-brand p { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.7; }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 14px; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,.6); text-decoration: none; margin-bottom: 9px; transition: color .2s; }
+    .footer-col a:hover { color: var(--teal); }
+    .footer-bottom {
+      padding-top: 28px; border-top: 1px solid rgba(255,255,255,.07);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.3); }
+    .footer-slogan { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 14px; color: rgba(255,255,255,.45); }
+
+    /* ── ANIMATIONS ── */
+
+    .art-thumb {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(49,109,116,.12) 0%, rgba(153,178,170,.2) 100%);
+      background-size: cover;
+      background-position: center;
+      transition: transform .4s ease;
+    }
+    .art:hover .art-thumb { transform: scale(1.04); }
+    .art-thumb .thumb-loading {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: var(--muted);
+      background: linear-gradient(135deg, rgba(49,109,116,.08) 0%, rgba(153,178,170,.15) 100%);
+    }
+    .art-thumb.loaded .thumb-loading { display: none; }
+    .art-thumb .sptag {
+      position: absolute; top: 14px; left: 14px; z-index: 2;
+      background: white; color: var(--blue);
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 100px;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .hero-text > * { opacity:0; animation: fadeUp .65s ease forwards; }
+    .hero-text > *:nth-child(1){animation-delay:.1s}
+    .hero-text > *:nth-child(2){animation-delay:.22s}
+    .hero-text > *:nth-child(3){animation-delay:.34s}
+    .hero-text > *:nth-child(4){animation-delay:.46s}
+    .hero-text > *:nth-child(5){animation-delay:.58s}
+    .hero-visual > * { opacity:0; animation: fadeUp .65s ease forwards; }
+    .hero-visual > *:nth-child(1){animation-delay:.45s}
+    .hero-visual > *:nth-child(2){animation-delay:.6s}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .hero-inner{grid-template-columns:1fr}
+      .hero-visual{display:none}
+      .services-grid{grid-template-columns:1fr}
+      .locations-grid{grid-template-columns:1fr}
+      .loc-card{min-height:300px}
+      .loc-details{max-height:200px}
+      .loc-cta-row{opacity:1;transform:none}
+      .hub-top{grid-template-columns:1fr}
+      .articles-grid{grid-template-columns:1fr}
+      .art.feat{grid-row:span 1}
+      .portal-inner{grid-template-columns:1fr}
+      .portal-mockup{display:none}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      .nav-links .nav-portal-btn,.nav-links>a:not(.nav-emergency-btn):not(.nav-portal-btn){display:none}
+      .az-results{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><img src="logo.png" alt="Pets &amp; Pets"/></a>
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#conocimiento">Conocimiento</a>
+      <a href="#sedes">Sedes</a>
+      <a href="portal.html">Mi Portal</a>
+      <a href="tel:+576012345678" class="nav-emergency-btn">📞 Urgencias 24/7</a>
+      <a href="portal.html" class="nav-portal-btn">Acceder al Portal</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-photo-overlay"></div>
+  <div class="hero-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 60" preserveAspectRatio="none" style="display:block;width:100%;height:60px;">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow"><span></span>Cali, Colombia · 2 sedes operando</div>
+      <h1>Urgencias veterinarias<br/><em>24 horas</em>,<br/>todos los días</h1>
+      <p class="hero-desc">Medicina de alta complejidad para tu mascota. Disponibles ahora mismo — no importa la hora, no importa el día.</p>
+      <div class="hero-ctas">
+        <a href="tel:+576012345678" class="cta-emergency">📞 Llamar ahora · 24/7</a>
+        <a href="https://wa.me/576012345678" class="cta-whatsapp">💬 WhatsApp</a>
+        <a href="#conocimiento" class="cta-secondary">Base de conocimiento</a>
+      </div>
+      <div class="hero-stats">
+        <div><span class="stat-num">24/7</span><span class="stat-label">Atención de emergencias<br/>365 días al año</span></div>
+        <div><span class="stat-num">2</span><span class="stat-label">Sedes en Cali<br/>+ 1 en camino</span></div>
+        <div><span class="stat-num">+500</span><span class="stat-label">Artículos clínicos<br/>en español</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hv-card hv-red">
+        <div class="hv-icon">🚨</div>
+        <div>
+          <div class="hv-title">Urgencias activas ahora</div>
+          <div class="hv-sub">Equipo disponible · Respuesta inmediata</div>
+        </div>
+        <div class="hv-red-right">
+          <div class="big">24/7</div>
+          <div class="small">Sin cita previa</div>
+        </div>
+      </div>
+      <div class="hv-card">
+        <div class="hv-card-head">
+          <div class="hv-icon">🔬</div>
+          <div>
+            <div class="hv-title">Clasificación de urgencias</div>
+            <div class="hv-sub">Protocolo Pets &amp; Pets · WSAVA</div>
+          </div>
+        </div>
+        <div class="hv-body">Triaje estandarizado para una atención rápida y precisa desde el primer minuto.</div>
+        <div class="urgency-bar">
+          <div class="urg green"></div>
+          <div class="urg yellow"></div>
+          <div class="urg orange"></div>
+          <div class="urg red"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="servicios">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Nuestros servicios</span>
+      <h2>Todo lo que tu mascota<br/><em>necesita</em>, en un solo lugar</h2>
+      <p>Tres áreas especializadas que cubren desde la emergencia más crítica hasta el bienestar preventivo de tu compañero.</p>
+    </div>
+    <div class="services-grid">
+      <div class="svc hospital">
+        <span class="svc-badge">Pet Hospital</span>
+        <span class="svc-icon">
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+    <rect x="8" y="8" width="32" height="32" rx="6" fill="rgba(255,255,255,0.15)"/>
+    <path d="M24 14v20M14 24h20" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M16 8h16M8 16v16M32 8h4a4 4 0 014 4v4M16 40H8v-4M40 32v4a4 4 0 01-4 4h-4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</span>
+        <h3>Emergencias y hospitalización</h3>
+        <p>Atención de alta complejidad las 24 horas. Diagnóstico por imagen, laboratorio clínico y cirugía disponibles en todo momento.</p>
+        <div class="svc-list">
+          <span>Urgencias 24h, 365 días</span>
+          <span>Diagnóstico por imagen (Rx, Eco)</span>
+          <span>Laboratorio clínico interno</span>
+          <span>UCI y hospitalización</span>
+          <span>Cirugía de emergencia</span>
+        </div>
+      </div>
+      <div class="svc wellness">
+        <span class="svc-badge">Pet Wellness</span>
+        <span class="svc-icon">
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+    <path d="M24 38C24 38 12 30 12 20C12 13.4 17.4 8 24 8C30.6 8 36 13.4 36 20C36 30 24 38 24 38Z" fill="rgba(166,120,91,0.2)" stroke="#a6785b" stroke-width="2"/>
+    <path d="M24 38V22M24 22C24 22 18 18 16 14M24 22C24 22 30 18 32 14" stroke="#a6785b" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</span>
+        <h3>Prevención y bienestar</h3>
+        <p>Medicina preventiva, vacunación y control de peso para una vida larga y saludable.</p>
+        <div class="svc-list">
+          <span>Plan de vacunación</span>
+          <span>Medicina interna</span>
+          <span>Nutrición clínica</span>
+          <span>Dermatología</span>
+        </div>
+      </div>
+      <div class="svc shop">
+        <span class="svc-badge">Pet Shop</span>
+        <span class="svc-icon">
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+    <rect x="10" y="18" width="28" height="22" rx="3" fill="rgba(49,109,116,0.12)" stroke="#316d74" stroke-width="2"/>
+    <path d="M17 18c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#316d74" stroke-width="2" stroke-linecap="round"/>
+    <path d="M19 28h10M24 23v10" stroke="#316d74" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</span>
+        <h3>Productos de calidad</h3>
+        <p>Alimentos premium, medicamentos y accesorios seleccionados por nuestro equipo veterinario.</p>
+        <div class="svc-list">
+          <span>Alimentos terapéuticos</span>
+          <span>Medicamentos y suplementos</span>
+          <span>Accesorios y cuidado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEDES -->
+<section class="locations" id="sedes">
+  <div class="locations-top">
+    <div class="container">
+      <span class="section-tag" style="background:rgba(153,178,170,.15);color:var(--teal)">Nuestras sedes en Cali</span>
+      <h2>Cerca de ti,<br/><em>siempre disponibles</em></h2>
+      <p>Elige la sede más cercana. Ambas con atención de urgencias 24/7.</p>
+    </div>
+  </div>
+  <div class="locations-grid">
+    <div class="loc-card">
+      <div class="loc-photo" style="background-image:url('sede-sur.jpg?v=2');background-size:cover;background-position:center top"></div>
+      <div class="loc-overlay"></div>
+      <div class="loc-content">
+        <span class="loc-status open">Abierto ahora · 24/7</span>
+        <h3>Sede Sur</h3>
+        <p class="loc-address">Av. Cascajal #106–74<br/>Ciudad Jardín, Cali</p>
+        <div class="loc-details">
+          <div class="loc-detail">Urgencias permanentes</div>
+          <div class="loc-detail">Pet Shop y Spa canino</div>
+          <div class="loc-detail">Clínica veterinaria 24h</div>
+        </div>
+        <div class="loc-cta-row">
+          <a href="tel:+576012345678" class="loc-btn call">📞 Llamar</a>
+          <a href="https://wa.me/576012345678" class="loc-btn wa">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+    <div class="loc-card">
+      <div class="loc-photo" style="background-image:url('sede-autopista.jpg?v=2');background-size:cover;background-position:center top"></div>
+      <div class="loc-overlay"></div>
+      <div class="loc-content">
+        <span class="loc-status open">Abierto ahora · 24/7</span>
+        <h3>Sede Autopista</h3>
+        <p class="loc-address">Calle 10 #31–143<br/>Cali, Valle del Cauca</p>
+        <div class="loc-details">
+          <div class="loc-detail">Urgencias permanentes</div>
+          <div class="loc-detail">Diagnóstico por imagen</div>
+          <div class="loc-detail">Laboratorio clínico</div>
+        </div>
+        <div class="loc-cta-row">
+          <a href="tel:+576012345678" class="loc-btn call">📞 Llamar</a>
+          <a href="https://wa.me/576012345678" class="loc-btn wa">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+    <div class="loc-card">
+      <div class="loc-photo" style="background:linear-gradient(160deg,#2a3a2a 0%,#1a2a1a 100%)"></div>
+      <div class="loc-overlay"></div>
+      <div class="loc-content">
+        <span class="loc-status soon">Próximamente · 2026</span>
+        <h3>Sede Norte</h3>
+        <p class="loc-address">Sector norte de Cali<br/>Dirección por confirmar</p>
+        <div class="loc-details">
+          <div class="loc-detail">Mismos servicios 24/7</div>
+          <div class="loc-detail">Mayor cobertura norte</div>
+        </div>
+        <div class="loc-cta-row">
+          <a href="https://wa.me/576012345678" class="loc-btn wa">💬 Notificarme</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE HUB -->
+<section class="hub" id="conocimiento">
+  <div class="container">
+    <div class="hub-top">
+      <div>
+        <span class="section-tag">Base de conocimiento</span>
+        <h2>La referencia clínica<br/>veterinaria de <em>Colombia</em></h2>
+      </div>
+      <div>
+        <p>Artículos revisados por nuestro equipo médico. Para dueños que quieren entender y veterinarios que necesitan consultar.</p>
+      </div>
+    </div>
+
+    <!-- A-Z INDEX -->
+    <div class="az-section">
+      <div class="az-header">
+        <h3>Índice de enfermedades y condiciones</h3>
+        <div class="az-search">
+          <span>🔍</span>
+          <input type="text" id="azSearchInput" placeholder="Buscar enfermedad o condición..."/>
+        </div>
+      </div>
+      <div class="az-letters" id="azLetters"></div>
+      <div class="az-results" id="azResults"></div>
+      <a href="#conocimiento" class="az-see-all">Ver todas las condiciones</a>
+    </div>
+
+    <!-- ARTICLES -->
+    <div class="articles-grid" id="articlesGrid">
+      <a class="art feat" href="article-parvovirosis-canina.html">
+        <div class="art-thumb" id="thumb-parvo">
+          <div class="thumb-loading">Cargando...</div>
+          <span class="sptag">Canino</span>
+        </div>
+        <div class="art-body">
+          <div class="art-meta"><span>Enfermedades infecciosas</span><span class="dot"></span><span>12 min</span></div>
+          <h3>Parvovirosis canina: diagnóstico temprano, manejo clínico y pronóstico</h3>
+          <p>Guía completa de abordaje clínico. Criterios diagnósticos, protocolos WSAVA 2024 y factores pronósticos validados.</p>
+          <div class="art-footer"><span class="read-more">Leer artículo completo</span><span style="font-size:12px;color:var(--muted)">Intermedio</span></div>
+        </div>
+      </a>
+      <a class="art" href="article-insuficiencia-renal-cronica-gatos.html">
+        <div class="art-thumb" id="thumb-irc" style="height:130px">
+          <div class="thumb-loading">Cargando...</div>
+          <span class="sptag">Felino</span>
+        </div>
+        <div class="art-body">
+          <div class="art-meta"><span>Nefrología</span><span class="dot"></span><span>10 min</span></div>
+          <h3>Insuficiencia renal crónica en gatos: estadificación IRIS y manejo</h3>
+          <p>Estadios, dieta terapéutica y seguimiento clínico.</p>
+          <div class="art-footer"><span class="read-more">Leer</span></div>
+        </div>
+      </a>
+      <a class="art" href="article-moquillo-canino.html">
+        <div class="art-thumb" id="thumb-moquillo" style="height:130px">
+          <div class="thumb-loading">Cargando...</div>
+          <span class="sptag">Canino</span>
+        </div>
+        <div class="art-body">
+          <div class="art-meta"><span>Enfermedades infecciosas</span><span class="dot"></span><span>9 min</span></div>
+          <h3>Moquillo canino: reconocimiento temprano y prevención</h3>
+          <p>Fases clínicas, diagnóstico y vacunación.</p>
+          <div class="art-footer"><span class="read-more">Leer</span></div>
+        </div>
+      </a>
+      <a class="art" href="article-torsion-gastrica-canina.html">
+        <div class="art-thumb" id="thumb-torsion" style="height:130px">
+          <div class="thumb-loading">Cargando...</div>
+          <span class="sptag">Emergencias</span>
+        </div>
+        <div class="art-body">
+          <div class="art-meta"><span>Emergencias</span><span class="dot"></span><span>8 min</span></div>
+          <h3>Torsión gástrica (GDV): la emergencia que no puede esperar</h3>
+          <p>Signos de alarma, razas de riesgo y manejo urgente.</p>
+          <div class="art-footer"><span class="read-more">Leer</span></div>
+        </div>
+      </a>
+      <a class="art" href="article-leptospirosis-canina.html">
+        <div class="art-thumb" id="thumb-lepto" style="height:130px">
+          <div class="thumb-loading">Cargando...</div>
+          <span class="sptag">Canino</span>
+        </div>
+        <div class="art-body">
+          <div class="art-meta"><span>Enfermedades infecciosas</span><span class="dot"></span><span>8 min</span></div>
+          <h3>Leptospirosis canina: riesgo urbano y zoonosis en Colombia</h3>
+          <p>Transmisión, diagnóstico y riesgo para la familia.</p>
+          <div class="art-footer"><span class="read-more">Leer</span></div>
+        </div>
+      </a>
+    </div>
+    <div class="hub-footer">
+      <p>Más de 500 artículos clínicos. Actualización mensual por nuestro equipo médico.</p>
+      <a href="#conocimiento" class="cta-secondary" style="display:inline-flex">Explorar toda la base de conocimiento</a>
+    </div>
+  </div>
+</section>
+
+<!-- PORTAL -->
+<section class="portal" id="portal">
+  <div class="container">
+    <div class="portal-inner">
+      <div class="portal-text">
+        <span class="section-tag" style="color:var(--teal);background:rgba(153,178,170,.1)">Portal del dueño</span>
+        <h2>La historia clínica de<br/>tu mascota, <em>siempre contigo</em></h2>
+        <p>Accede al historial completo de consultas, vacunas y diagnósticos de tu compañero. Todo disponible cuando lo necesites.</p>
+        <div class="portal-feats">
+          <div class="pfeat"><div class="pfeat-icon">📋</div><div><strong>Historial clínico completo</strong><span>Consultas, diagnósticos y tratamientos por paciente</span></div></div>
+          <div class="pfeat"><div class="pfeat-icon">💉</div><div><strong>Plan de vacunación</strong><span>Vacunas aplicadas y próximas dosis con recordatorios</span></div></div>
+          <div class="pfeat"><div class="pfeat-icon">📄</div><div><strong>Resultados de exámenes</strong><span>Laboratorio e imagenología disponibles para descargar</span></div></div>
+        </div>
+        <a href="portal.html" class="cta-secondary" style="border-color:var(--teal);color:var(--teal);display:inline-flex">Registrarse · Es gratuito</a>
+      </div>
+      <div class="portal-mockup">
+        <div class="mock-in">
+          <div class="mock-hd"><div class="mock-av">👤</div><div><strong>María Fernanda López</strong><span>3 mascotas registradas</span></div></div>
+          <div class="mock-pets">
+            <div class="pchip active">🐕 Max</div>
+            <div class="pchip">🐱 Luna</div>
+            <div class="pchip">🐕 Coco</div>
+          </div>
+          <div class="mock-card">
+            <div class="mock-card-hd"><strong>Última consulta</strong><span class="sbadge green">Alta médica</span></div>
+            <div class="mrow"><span>Fecha</span><span>14 Mar 2026</span></div>
+            <div class="mrow"><span>Diagnóstico</span><span>Gastroenteritis aguda</span></div>
+            <div class="mrow"><span>Tratamiento</span><span>Metronidazol 7 días</span></div>
+            <div class="mrow"><span>Peso</span><span>12.4 kg</span></div>
+          </div>
+          <div class="mock-card">
+            <div class="mock-card-hd"><strong>Próxima vacuna</strong><span class="sbadge yellow">En 18 días</span></div>
+            <div class="mrow"><span>Vacuna</span><span>Polivalente anual</span></div>
+            <div class="mrow"><span>Fecha</span><span>8 Abr 2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="logo.png" alt="Pets &amp; Pets"/>
+        <p>Clínica veterinaria de alta complejidad en Cali. Urgencias 24/7, medicina preventiva y la base de conocimiento veterinario más completa de Colombia.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <a href="#servicios">Pet Hospital · Urgencias 24/7</a>
+        <a href="#servicios">Pet Wellness</a>
+        <a href="#servicios">Pet Shop</a>
+      </div>
+      <div class="footer-col">
+        <h4>Conocimiento</h4>
+        <a href="#conocimiento">Índice A–Z de enfermedades</a>
+        <a href="#conocimiento">Artículos clínicos</a>
+        <a href="#conocimiento">Para veterinarios</a>
+        <a href="#conocimiento">Guías de diagnóstico</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="tel:+576012345678">📞 Llamar · 24/7</a>
+        <a href="https://wa.me/576012345678">💬 WhatsApp</a>
+        <a href="portal.html">Portal del dueño</a>
+        <a href="#sedes">Sedes y horarios</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Pets &amp; Pets · Dogspital Emergencias Veterinarias SAS</p>
+      <span class="footer-slogan">Tranquilidad para ti, cuidado para ellos</span>
+    </div>
+  </div>
+</footer>
+
+<!-- STICKY EMERGENCY BUTTONS -->
+<div class="sticky-emergency">
+  <a href="tel:+576012345678" class="stickyBtn emergency">📞 Urgencias 24/7</a>
+  <a href="https://wa.me/576012345678" class="stickyBtn whatsapp">💬 WhatsApp</a>
+</div>
+
+<script>
+// ── A-Z INDEX ──
+const diseases = {
+  A: [{t:"Alopecia felina",u:"#"},{t:"Anemia hemolítica",u:"#"},{t:"Artritis en perros",u:"#"},{t:"Asma bronquial felino",u:"#"}],
+  B: [{t:"Babesiosis canina",u:"#"},{t:"Bronquitis crónica",u:"#"}],
+  C: [{t:"Cardiomiopatía dilatada",u:"#"},{t:"Criptorquidismo",u:"#"},{t:"Cistitis felina",u:"#"}],
+  D: [{t:"Dermatitis atópica canina",u:"article-dermatitis-atopica-canina.html"},{t:"Diabetes mellitus canina",u:"article-diabetes-mellitus-canina.html"},{t:"Discoespondilitis",u:"#"}],
+  E: [{t:"Eclampsia puerperal",u:"#"},{t:"Enteritis hemorrágica",u:"#"}],
+  F: [{t:"Falla renal aguda",u:"#"},{t:"Fiebre hemorrágica felina",u:"#"}],
+  G: [{t:"Gastroenteritis aguda",u:"#"},{t:"Glaucoma canino",u:"#"}],
+  H: [{t:"Hepatitis infecciosa",u:"#"},{t:"Hipotiroidismo canino",u:"article-hipotiroidismo-canino.html"}],
+  I: [{t:"Insuficiencia cardíaca congestiva",u:"#"},{t:"Insuficiencia renal crónica felina",u:"article-insuficiencia-renal-cronica-gatos.html"}],
+  L: [{t:"Leptospirosis canina",u:"article-leptospirosis-canina.html"},{t:"Leishmaniasis",u:"#"},{t:"Linfoma multicéntrico",u:"#"}],
+  M: [{t:"Moquillo canino",u:"article-moquillo-canino.html"},{t:"Megaesófago",u:"#"}],
+  N: [{t:"Nefritis intersticial",u:"#"},{t:"Neumonía aspirativa",u:"#"}],
+  O: [{t:"Obesidad canina y felina",u:"#"},{t:"Otitis externa",u:"#"}],
+  P: [{t:"Pancreatitis aguda canina",u:"article-pancreatitis-aguda-canina.html"},{t:"Parvovirosis canina",u:"article-parvovirosis-canina.html"},{t:"Peritonitis infecciosa felina (PIF)",u:"article-peritonitis-infecciosa-felina.html"},{t:"Piómetra",u:"#"}],
+  R: [{t:"Rabia",u:"#"},{t:"Ruptura de ligamento cruzado",u:"#"}],
+  S: [{t:"Sarna sarcóptica",u:"#"},{t:"Síndrome de Cushing",u:"#"},{t:"Shock hipovolémico",u:"#"}],
+  T: [{t:"Toxoplasmosis",u:"#"},{t:"Torsión gástrica canina (GDV)",u:"article-torsion-gastrica-canina.html"},{t:"Tromboembolismo",u:"#"}],
+  U: [{t:"Urolitiasis canina y felina",u:"#"}],
+  V: [{t:"Vómito crónico felino",u:"#"},{t:"Vestibular síndrome",u:"#"}]
+};
+
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const lettersEl = document.getElementById("azLetters");
+const resultsEl = document.getElementById("azResults");
+const searchInput = document.getElementById("azSearchInput");
+let activeLetter = "P";
+
+function renderLetters(active) {
+  lettersEl.innerHTML = "";
+  alphabet.forEach(l => {
+    const btn = document.createElement("button");
+    btn.className = "az-letter" + (diseases[l] ? "" : " disabled") + (l === active ? " active" : "");
+    btn.textContent = l;
+    if (diseases[l]) {
+      btn.addEventListener("click", () => { activeLetter = l; renderLetters(l); renderResults(diseases[l]); searchInput.value = ""; });
+    }
+    lettersEl.appendChild(btn);
+  });
+}
+
+function renderResults(items) {
+  resultsEl.innerHTML = "";
+  items.forEach(d => {
+    const a = document.createElement("a");
+    a.className = "az-item";
+    a.href = d.u || "#";
+    a.textContent = d.t || d;
+    resultsEl.appendChild(a);
+  });
+}
+
+renderLetters(activeLetter);
+renderResults(diseases[activeLetter]);
+
+searchInput.addEventListener("input", function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) { renderLetters(activeLetter); renderResults(diseases[activeLetter]); return; }
+  const all = Object.values(diseases).flat();
+  const filtered = all.filter(d => (d.t||d).toLowerCase().includes(q));
+  document.querySelectorAll(".az-letter").forEach(b => b.classList.remove("active"));
+  renderResults(filtered.length ? filtered : []);
+  if (!filtered.length) resultsEl.innerHTML = "<span style='color:var(--muted);font-size:13px;grid-column:span 3'>Sin resultados para esta búsqueda</span>";
+});
+
+// pet chip
+document.querySelectorAll(".pchip").forEach(c => {
+  c.addEventListener("click", () => { document.querySelectorAll(".pchip").forEach(x=>x.classList.remove("active")); c.classList.add("active"); });
+});
+
+// scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity="1"; e.target.style.transform="translateY(0)"; } });
+}, {threshold:0.08});
+document.querySelectorAll(".svc,.art,.hv-card").forEach(el => {
+  el.style.opacity="0"; el.style.transform="translateY(18px)";
+  el.style.transition="opacity .5s ease, transform .5s ease";
+  obs.observe(el);
+});
+</script>
+
+<script>
+// Unsplash photo loader
+const UNSPLASH_KEY = "VklzmNpQ8mnuW1HE84njX81LIjfIO-agZh9GdjP7kYc";
+
+const thumbs = [
+  { id: "thumb-parvo",   query: "dog puppy portrait",          orient: "landscape" },
+  { id: "thumb-irc",     query: "cat portrait close up",       orient: "landscape" },
+  { id: "thumb-moquillo",query: "dog nose close up",           orient: "landscape" },
+  { id: "thumb-torsion", query: "large dog golden retriever",  orient: "landscape" },
+  { id: "thumb-lepto",   query: "dog rain puddle outdoor",     orient: "landscape" },
+];
+
+async function loadUnsplashPhoto(thumbId, query) {
+  try {
+    const url = `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&client_id=${UNSPLASH_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) return;
+    const data = await res.json();
+    const imgUrl = data.urls.regular;
+    const el = document.getElementById(thumbId);
+    if (!el) return;
+    el.style.backgroundImage = `url('${imgUrl}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.classList.add('loaded');
+    // Add dark overlay for text legibility
+    el.style.setProperty('--overlay', 'rgba(0,0,0,0.25)');
+  } catch(e) {
+    console.log('Unsplash load error:', e);
+  }
+}
+
+// Load all photos
+thumbs.forEach(t => loadUnsplashPhoto(t.id, t.query));
+</script>
+</body>
+</html>
