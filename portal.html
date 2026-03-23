@@ -203,383 +203,366 @@
     }
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* STICKY EMERGENCY */
-    .sticky-emergency{
-      position:fixed;bottom:24px;right:24px;z-index:500;
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .stickyBtn{
-      display:flex;align-items:center;gap:10px;
-      padding:12px 18px;border-radius:100px;
-      font-size:13px;font-weight:600;text-decoration:none;
-      box-shadow:0 6px 24px rgba(0,0,0,.2);transition:all .25s;
-    }
-    .stickyBtn.emergency{background:var(--red);color:white}
-    .stickyBtn.whatsapp{background:#25D366;color:white}
-
-    @media(max-width:700px){
+    /* RESPONSIVE */
+    @media (max-width:768px) {
+      nav{padding:0 16px}
       .auth-card{padding:32px 24px}
-      .portal-screen{padding:24px 16px}
+      .portal-screen{padding:20px 16px}
+      .portal-header .greeting{font-size:28px}
       .mascotas-grid{grid-template-columns:1fr}
       .consulta-item{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-
-<nav>
-  <a href="index.html"><img src="logo.png" alt="Pets & Pets"/></a>
-  <div class="nav-right">
-    <span class="nav-user" id="navUser"></span>
-    <button class="btn-logout" id="btnLogout" style="display:none" onclick="logout()">Cerrar sesión</button>
-  </div>
-</nav>
-
-<!-- ── AUTH SCREEN ── -->
-<div class="auth-screen" id="authScreen">
-  <div class="auth-card">
-    <div class="logo"><img src="logo.png" alt="Pets & Pets"/></div>
-
-    <!-- PASO 1: CÉDULA -->
-    <div id="step1">
-      <h2 class="auth-title">Bienvenido a tu <em>portal</em></h2>
-      <p class="auth-sub">Ingresa tu número de cédula para acceder al historial clínico de tus mascotas.</p>
-      <div class="error-msg" id="step1Error"></div>
-      <div class="form-group">
-        <label>Número de cédula</label>
-        <input type="text" id="cedulaInput" placeholder="1234567890"
-          onkeydown="if(event.key==='Enter') checkCedula()"/>
-      </div>
-      <button class="btn-primary" onclick="checkCedula()">Continuar</button>
+  <!-- NAV -->
+  <nav>
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 32'%3E%3Ctext x='8' y='24' font-family='Fraunces' font-size='20' font-weight='300'%3EPets%3C/text%3E%3C/svg%3E" alt="Logo"/>
+    <div class="nav-right">
+      <span class="nav-user" id="navUser"></span>
+      <button class="btn-logout" id="btnLogout" onclick="logout()" style="display:none">Salir</button>
     </div>
+  </nav>
 
-    <!-- PASO 2A: NUEVA CONTRASEÑA (primera vez) -->
-    <div id="step2new" style="display:none">
-      <h2 class="auth-title">Crea tu <em>contraseña</em></h2>
-      <p class="auth-sub">Es tu primera vez. Elige una contraseña para acceder a tu portal en el futuro.</p>
-      <div class="error-msg" id="step2newError"></div>
-      <div class="form-group">
-        <label>Nueva contraseña</label>
-        <input type="password" id="newPassword" placeholder="Mínimo 8 caracteres"
-          onkeydown="if(event.key==='Enter') createPassword()"/>
+  <!-- AUTH SCREEN -->
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+      <div class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="17" fill="#316d74" stroke="#1c3b3f" stroke-width="2"/>
+          <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-size="20" fill="white" font-weight="500">🐾</text>
+        </svg>
       </div>
-      <div class="form-group">
-        <label>Confirmar contraseña</label>
-        <input type="password" id="newPassword2" placeholder="Repite tu contraseña"
-          onkeydown="if(event.key==='Enter') createPassword()"/>
+      <h1 class="auth-title">Bienvenido a <em>Pets & Pets</em></h1>
+      <p class="auth-sub">Tu portal veterinario. Accede con tu cédula para ver el historial de tu mascota.</p>
+
+      <!-- STEP 1: CEDULA -->
+      <div id="step1">
+        <div class="error-msg" id="step1Error"></div>
+        <div class="form-group">
+          <label>Cédula de ciudadanía</label>
+          <input type="text" id="cedulaInput" placeholder="p.ej. 1234567890" inputmode="numeric"/>
+        </div>
+        <button class="btn-primary" onclick="handleCedula()">Continuar</button>
       </div>
-      <button class="btn-primary" onclick="createPassword()">Entrar al portal</button>
-      <div class="auth-switch"><a onclick="goBack()">← Volver</a></div>
+
+      <!-- STEP 2A: NEW USER (CREATE ACCOUNT) -->
+      <div id="step2new" style="display:none">
+        <div class="error-msg" id="step2newError"></div>
+        <div class="success-msg" id="step2newSuccess"></div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:20px">
+          Cédula: <strong id="cedulaDisplay"></strong>
+        </p>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="newEmail" placeholder="tu@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Crear una contraseña</label>
+          <input type="password" id="newPassword" placeholder="Mín. 6 caracteres"/>
+        </div>
+        <button class="btn-primary" onclick="signupNewUser()">Crear acceso</button>
+        <div class="auth-switch">
+          <a onclick="showStep('step1')">← Volver</a>
+        </div>
+      </div>
+
+      <!-- STEP 2B: EXISTING USER (LOGIN) -->
+      <div id="step2login" style="display:none">
+        <div class="error-msg" id="step2loginError"></div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:20px">
+          Cédula: <strong id="cedulaDisplay2"></strong>
+        </p>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="existingPassword" placeholder="Tu contraseña"/>
+        </div>
+        <button class="btn-primary" onclick="loginWithPassword()">Entrar al portal</button>
+        <div class="auth-switch">
+          <a onclick="showStep('step1')">← Volver</a>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- PASO 2B: CONTRASEÑA EXISTENTE -->
-    <div id="step2login" style="display:none">
-      <h2 class="auth-title">Ingresa tu <em>contraseña</em></h2>
-      <p class="auth-sub">Cédula: <strong id="cedulaDisplay"></strong></p>
-      <div class="error-msg" id="step2loginError"></div>
-      <div class="form-group">
-        <label>Contraseña</label>
-        <input type="password" id="existingPassword" placeholder="Tu contraseña"
-          onkeydown="if(event.key==='Enter') loginWithPassword()"/>
-      </div>
-      <button class="btn-primary" onclick="loginWithPassword()">Entrar al portal</button>
-      <div class="auth-switch"><a onclick="goBack()">← Volver</a></div>
+  <!-- PORTAL SCREEN -->
+  <div class="portal-screen" id="portalScreen">
+    <div class="portal-header">
+      <h1 class="greeting">Hola, <em id="userName">usuario</em></h1>
+      <p class="sub">Tu historial médico veterinario en un solo lugar</p>
+    </div>
+    <div id="portalContent" class="loading">
+      <div class="spinner"></div>
+      Hola, cargando...
     </div>
   </div>
-</div>
 
-<!-- ── PORTAL SCREEN ── -->
-<div class="portal-screen" id="portalScreen">
-  <div class="portal-header">
-    <h1 class="greeting">Hola, <em id="userName">cargando...</em></h1>
-    <p class="sub">Aquí está el historial clínico de tus mascotas.</p>
-  </div>
+  <script>
+    // ── CONFIG ──
+    const supabaseUrl = 'https://oifuvrcfqlknwyipfnxk.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pZnV2cmNmcWxrbnd5aXBmbnhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjM0NTgsImV4cCI6MjA4OTc5OTQ1OH0.GNcmlYgFlJHlGGnngz3oQm33iTdx9f9_hMo4Dl2ZpAY';
+    const sb = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-  <div id="portalContent">
-    <div class="loading"><div class="spinner"></div> Cargando tus mascotas...</div>
-  </div>
-</div>
+    let currentCedula = '';
+    let portalLoaded = false;
 
-<!-- STICKY BUTTONS -->
-<div class="sticky-emergency">
-  <a href="tel:+576012345678" class="stickyBtn emergency">📞 Urgencias 24/7</a>
-  <a href="https://wa.me/576012345678" class="stickyBtn whatsapp">💬 WhatsApp</a>
-</div>
-
-<script>
-// ── SUPABASE INIT ──
-const { createClient } = supabase;
-const sb = createClient('https://oifuvrcfqlknwyipfnxk.supabase.co', 'sb_publishable__sNlMM962uV4L5Ru13aPlQ_DzNqcA6i');
-
-// ── HELPERS ──
-function showError(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.style.display = 'block';
-}
-function hideError(id) {
-  const el = document.getElementById(id);
-  if(el) el.style.display = 'none';
-}
-function showStep(step) {
-  ['step1','step2new','step2login'].forEach(s => {
-    document.getElementById(s).style.display = s === step ? 'block' : 'none';
-  });
-}
-function goBack() { showStep('step1'); }
-
-// Cédula genera un email interno único (Supabase requiere email)
-function cedulaToEmail(cedula) {
-  return `${cedula}@portal.petspets.co`;
-}
-
-let currentCedula = '';
-let portalLoaded = false;
-
-// ── PASO 1: VERIFICAR CÉDULA ──
-async function checkCedula() {
-  hideError('step1Error');
-  const cedula = document.getElementById('cedulaInput').value.trim();
-  if (!cedula || !/^\d{6,12}$/.test(cedula))
-    return showError('step1Error', 'Ingresa un número de cédula válido (6 a 12 dígitos).');
-
-  const btn = document.querySelector('#step1 .btn-primary');
-  btn.disabled = true; btn.textContent = 'Verificando...';
-
-  currentCedula = cedula;
-
-  // Verificar si el usuario existe intentando login con password falso
-  // "Invalid login credentials" = existe pero password malo → pedir contraseña
-  // Cualquier otro error o email no encontrado = nuevo usuario → crear contraseña
-  const email = cedulaToEmail(cedula);
-  const { error: loginError } = await sb.auth.signInWithPassword({ email, password: '__check__' });
-
-  btn.disabled = false; btn.textContent = 'Continuar';
-
-  const existe = loginError?.message?.includes('Invalid login credentials') ||
-                 loginError?.message?.includes('Email not confirmed');
-
-  if (existe) {
-    // Usuario existe → pedir contraseña
-    document.getElementById('cedulaDisplay').textContent = cedula;
-    showStep('step2login');
-  } else {
-    // Usuario no existe → crear contraseña
-    showStep('step2new');
-  }
-}
-
-// ── PASO 2A: CREAR CONTRASEÑA (primera vez) ──
-async function createPassword() {
-  hideError('step2newError');
-  const pass1 = document.getElementById('newPassword').value;
-  const pass2 = document.getElementById('newPassword2').value;
-
-  if (pass1.length < 8)
-    return showError('step2newError', 'La contraseña debe tener mínimo 8 caracteres.');
-  if (pass1 !== pass2)
-    return showError('step2newError', 'Las contraseñas no coinciden.');
-
-  const btn = document.querySelector('#step2new .btn-primary');
-  btn.disabled = true; btn.textContent = 'Creando acceso...';
-
-  const email = cedulaToEmail(currentCedula);
-  const { data, error } = await sb.auth.signUp({ email, password: pass1 });
-
-  if (error) {
-    if (error.message.includes('already registered')) {
-      // Ya existe, intentar login directo
-      document.getElementById('cedulaDisplay').textContent = currentCedula;
-      showStep('step2login');
-    } else {
-      showError('step2newError', 'Error al crear acceso. Intenta de nuevo.');
+    // ── HELPER: CEDULA -> EMAIL ──
+    function cedulaToEmail(cedula) {
+      return `${cedula}@pets-and-pets.local`;
     }
-    btn.disabled = false; btn.textContent = 'Entrar al portal';
-    return;
-  }
 
-  // Crear perfil en tabla perfiles
-  if (data.user) {
-    await sb.from('perfiles').upsert({
-      id: data.user.id,
-      cedula: currentCedula,
-      nombre_completo: '',
-      email
-    });
-  }
+    // ── STEP DISPLAY ──
+    function showStep(stepId) {
+      ['step1', 'step2new', 'step2login'].forEach(id => {
+        document.getElementById(id).style.display = id === stepId ? 'block' : 'none';
+      });
+    }
 
-  btn.disabled = false; btn.textContent = 'Entrar al portal';
-}
+    function showError(elemId, msg) {
+      const el = document.getElementById(elemId);
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
 
-// ── PASO 2B: LOGIN CON CONTRASEÑA ──
-async function loginWithPassword() {
-  hideError('step2loginError');
-  const password = document.getElementById('existingPassword').value;
-  if (!password) return showError('step2loginError', 'Ingresa tu contraseña.');
+    function hideError(elemId) {
+      document.getElementById(elemId).style.display = 'none';
+    }
 
-  const btn = document.querySelector('#step2login .btn-primary');
-  btn.disabled = true; btn.textContent = 'Entrando...';
+    // ── PASO 1: CEDULA INPUT ──
+    async function handleCedula() {
+      hideError('step1Error');
+      const cedula = document.getElementById('cedulaInput').value.trim();
 
-  const email = cedulaToEmail(currentCedula);
-  const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (!cedula || cedula.length < 5) {
+        return showError('step1Error', 'Ingresa una cédula válida.');
+      }
 
-  if (error) {
-    showError('step2loginError', 'Contraseña incorrecta. Intenta de nuevo.');
-    btn.disabled = false; btn.textContent = 'Entrar al portal';
-  }
-}
+      currentCedula = cedula;
+      const email = cedulaToEmail(cedula);
 
-// ── LOGOUT ──
-async function logout() {
-  await sb.auth.signOut();
-  showStep('step1');
-  document.getElementById('cedulaInput').value = '';
-}
+      // Verificar si existe usuario
+      const { data: { user } } = await sb.auth.admin.getUserById(email);
 
-// ── LOAD PORTAL ──
-async function loadPortal(user) {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('portalScreen').style.display = 'block';
-  document.getElementById('btnLogout').style.display = 'block';
+      if (user) {
+        // Usuario existe → step2login
+        document.getElementById('cedulaDisplay2').textContent = cedula;
+        showStep('step2login');
+      } else {
+        // Usuario NO existe → step2new
+        document.getElementById('cedulaDisplay').textContent = cedula;
+        showStep('step2new');
+      }
+    }
 
-  try {
-    const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).maybeSingle();
-    const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
-    document.getElementById('userName').textContent = nombre;
-    document.getElementById('navUser').textContent = perfil?.email || user.email || '';
+    // ── PASO 2A: SIGNUP ──
+    async function signupNewUser() {
+      hideError('step2newError');
+      const email = document.getElementById('newEmail').value.trim();
+      const password = document.getElementById('newPassword').value;
 
-    const cedula = perfil?.cedula;
-    if (!cedula) { renderPortal([], null); return; }
+      if (!email) return showError('step2newError', 'Ingresa un email válido.');
+      if (password.length < 6) return showError('step2newError', 'La contraseña debe tener mín. 6 caracteres.');
 
-    const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
-    renderPortal(mascotas || [], cedula);
-  } catch(e) {
-    document.getElementById('userName').textContent = 'usuario';
-    renderPortal([], null);
-  }
-}
+      const btn = document.querySelector('#step2new .btn-primary');
+      btn.disabled = true; btn.textContent = 'Creando acceso...';
 
-function renderPortal(mascotas, cedula) {
-  const cont = document.getElementById('portalContent');
+      const { data, error } = await sb.auth.signUp({ email, password });
 
-  if (mascotas.length === 0) {
-    cont.innerHTML = `
-      <div class="empty-state">
-        <div class="icon">🐾</div>
-        <p>Aún no hay mascotas registradas a tu cédula.<br/>
-        Si ya has visitado Pets & Pets, contactanos para vincular tu historial.</p>
-        <a href="https://wa.me/576012345678" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#25D366;color:white;padding:12px 24px;border-radius:100px;text-decoration:none;font-weight:500">
-          💬 Contactar por WhatsApp
-        </a>
-      </div>`;
-    return;
-  }
+      if (error) {
+        if (error.message.includes('already registered')) {
+          // Ya existe, intentar login directo
+          document.getElementById('cedulaDisplay').textContent = currentCedula;
+          showStep('step2login');
+        } else {
+          showError('step2newError', 'Error al crear acceso. Intenta de nuevo.');
+        }
+        btn.disabled = false; btn.textContent = 'Entrar al portal';
+        return;
+      }
 
-  const emojiMap = { 'Canino': '🐕', 'Felino': '🐱', 'Otro': '🐾' };
+      // Crear perfil en tabla perfiles
+      if (data.user) {
+        await sb.from('perfiles').upsert({
+          id: data.user.id,
+          cedula: currentCedula,
+          nombre_completo: '',
+          email
+        });
+      }
 
-  cont.innerHTML = `
-    <p class="section-title">Tus mascotas</p>
-    <div class="mascotas-grid" id="mascotasGrid">
-      ${mascotas.map(m => `
-        <div class="mascota-card" onclick="selectMascota('${m.id}', this)" id="card-${m.id}">
-          <div class="mascota-header">
-            <div class="mascota-avatar">${emojiMap[m.especie] || '🐾'}</div>
-            <div>
-              <div class="mascota-name">${m.nombre}</div>
-              <div class="mascota-info">${m.especie} · ${m.raza || 'Raza no especificada'}</div>
-            </div>
-          </div>
-          <div class="mascota-body">
-            <div class="mascota-stat"><span class="lbl">Sexo</span><span class="val">${m.sexo || '—'}</span></div>
-            <div class="mascota-stat"><span class="lbl">Nacimiento</span><span class="val">${m.fecha_nacimiento ? new Date(m.fecha_nacimiento).toLocaleDateString('es-CO') : '—'}</span></div>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-    <div id="historialContainer"></div>`;
+      btn.disabled = false; btn.textContent = 'Entrar al portal';
+    }
 
-  // Auto-seleccionar primera mascota
-  if (mascotas.length > 0) selectMascota(mascotas[0].id, document.getElementById('card-' + mascotas[0].id));
-}
+    // ── PASO 2B: LOGIN CON CONTRASEÑA ──
+    async function loginWithPassword() {
+      hideError('step2loginError');
+      const password = document.getElementById('existingPassword').value;
+      if (!password) return showError('step2loginError', 'Ingresa tu contraseña.');
 
-async function selectMascota(mascotaId, cardEl) {
-  // Highlight
-  document.querySelectorAll('.mascota-card').forEach(c => c.classList.remove('active'));
-  if (cardEl) cardEl.classList.add('active');
+      const btn = document.querySelector('#step2login .btn-primary');
+      btn.disabled = true; btn.textContent = 'Entrando...';
 
-  const cont = document.getElementById('historialContainer');
-  cont.innerHTML = '<div class="loading"><div class="spinner"></div> Cargando historial...</div>';
+      const email = cedulaToEmail(currentCedula);
+      const { error } = await sb.auth.signInWithPassword({ email, password });
 
-  const [{ data: consultas }, { data: vacunas }] = await Promise.all([
-    sb.from('consultas').select('*').eq('mascota_id', mascotaId).order('fecha', { ascending: false }),
-    sb.from('vacunas').select('*').eq('mascota_id', mascotaId).order('fecha_aplicacion', { ascending: false })
-  ]);
+      if (error) {
+        showError('step2loginError', 'Contraseña incorrecta. Intenta de nuevo.');
+        btn.disabled = false; btn.textContent = 'Entrar al portal';
+      }
+    }
 
-  const hoy = new Date();
+    // ── LOGOUT ──
+    async function logout() {
+      await sb.auth.signOut();
+      showStep('step1');
+      document.getElementById('cedulaInput').value = '';
+    }
 
-  cont.innerHTML = `
-    <div class="historial-section">
-      <h3>Historial de consultas</h3>
-      ${consultas && consultas.length > 0 ? consultas.map(c => `
-        <div class="consulta-item">
-          <div class="consulta-fecha">${new Date(c.fecha).toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'})}</div>
-          <div>
-            <div class="consulta-diagnostico">${c.diagnostico || c.motivo || 'Consulta general'}</div>
-            ${c.tratamiento ? `<div class="consulta-detalle">Tratamiento: ${c.tratamiento}</div>` : ''}
-            ${c.observaciones ? `<div class="consulta-detalle">${c.observaciones}</div>` : ''}
-            <div class="consulta-badges">
-              ${c.sede ? `<span class="badge sede">${c.sede}</span>` : ''}
-              ${c.veterinario ? `<span class="badge vet">Dr. ${c.veterinario}</span>` : ''}
-              ${c.peso_kg ? `<span class="badge peso">${c.peso_kg} kg</span>` : ''}
-            </div>
-          </div>
-        </div>
-      `).join('') : '<div class="empty-state"><p>No hay consultas registradas aún.</p></div>'}
-    </div>
+    // ── LOAD PORTAL ──
+    async function loadPortal(user) {
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('portalScreen').style.display = 'block';
+      document.getElementById('btnLogout').style.display = 'block';
 
-    <div class="historial-section">
-      <h3>Plan de vacunación</h3>
-      ${vacunas && vacunas.length > 0 ? vacunas.map(v => {
-        const proxima = v.fecha_proxima ? new Date(v.fecha_proxima) : null;
-        const diasRestantes = proxima ? Math.ceil((proxima - hoy) / (1000*60*60*24)) : null;
-        const estado = diasRestantes !== null
-          ? (diasRestantes <= 30 ? `<span class="vacuna-proxima pronto">Próxima: ${proxima.toLocaleDateString('es-CO')}</span>`
-          : `<span class="vacuna-proxima ok">Al día ✓</span>`)
-          : '';
-        return `
-          <div class="vacuna-item">
-            <div>
-              <div class="vacuna-nombre">${v.nombre_vacuna}</div>
-              <div class="vacuna-fecha">Aplicada: ${new Date(v.fecha_aplicacion).toLocaleDateString('es-CO')}</div>
-            </div>
-            ${estado}
+      try {
+        const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).maybeSingle();
+        const nombre = perfil?.nombre_completo?.trim().split(' ')[0] || 'usuario';
+        document.getElementById('userName').textContent = nombre;
+        document.getElementById('navUser').textContent = perfil?.email || user.email || '';
+
+        const cedula = perfil?.cedula;
+        if (!cedula) { renderPortal([], null); return; }
+
+        const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
+        renderPortal(mascotas || [], cedula);
+      } catch(e) {
+        document.getElementById('userName').textContent = 'usuario';
+        renderPortal([], null);
+      }
+    }
+
+    function renderPortal(mascotas, cedula) {
+      const cont = document.getElementById('portalContent');
+
+      if (mascotas.length === 0) {
+        cont.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🐾</div>
+            <p>Aún no hay mascotas registradas a tu cédula.<br/>
+            Si ya has visitado Pets & Pets, contactanos para vincular tu historial.</p>
+            <a href="https://wa.me/576012345678" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#25D366;color:white;padding:12px 24px;border-radius:100px;text-decoration:none;font-weight:500">
+              💬 Contactar por WhatsApp
+            </a>
           </div>`;
-      }).join('') : '<div class="empty-state"><p>No hay vacunas registradas aún.</p></div>'}
-    </div>`;
-}
+        return;
+      }
 
-// ── AUTH STATE LISTENER ──
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session?.user && !portalLoaded) {
-    portalLoaded = true;
-    await loadPortal(session.user);
-  } else if (event === 'SIGNED_OUT') {
-    portalLoaded = false;
-    document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
-    document.getElementById('portalScreen').style.display = 'none';
-    document.getElementById('btnLogout').style.display = 'none';
-    document.getElementById('navUser').textContent = '';
-  }
-});
+      const emojiMap = { 'Canino': '🐕', 'Felino': '🐱', 'Otro': '🐾' };
 
-// ── VERIFICAR SESION ACTIVA AL CARGAR ──
-// Esto maneja el caso de volver al portal con sesion ya existente
-(async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session?.user && !portalLoaded) {
-    portalLoaded = true;
-    await loadPortal(session.user);
-  }
-})();
-</script>
+      cont.innerHTML = `
+        <p class="section-title">Tus mascotas</p>
+        <div class="mascotas-grid" id="mascotasGrid">
+          ${mascotas.map(m => `
+            <div class="mascota-card" onclick="selectMascota('${m.id}', this)" id="card-${m.id}">
+              <div class="mascota-header">
+                <div class="mascota-avatar">${emojiMap[m.especie] || '🐾'}</div>
+                <div>
+                  <div class="mascota-name">${m.nombre}</div>
+                  <div class="mascota-info">${m.especie} · ${m.raza || 'Raza no especificada'}</div>
+                </div>
+              </div>
+              <div class="mascota-body">
+                <div class="mascota-stat"><span class="lbl">Sexo</span><span class="val">${m.sexo || '—'}</span></div>
+                <div class="mascota-stat"><span class="lbl">Nacimiento</span><span class="val">${m.fecha_nacimiento ? new Date(m.fecha_nacimiento).toLocaleDateString('es-CO') : '—'}</span></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div id="historialContainer"></div>`;
+
+      // Auto-seleccionar primera mascota
+      if (mascotas.length > 0) selectMascota(mascotas[0].id, document.getElementById('card-' + mascotas[0].id));
+    }
+
+    async function selectMascota(mascotaId, cardEl) {
+      // Highlight
+      document.querySelectorAll('.mascota-card').forEach(c => c.classList.remove('active'));
+      if (cardEl) cardEl.classList.add('active');
+
+      const cont = document.getElementById('historialContainer');
+      cont.innerHTML = '<div class="loading"><div class="spinner"></div> Cargando historial...</div>';
+
+      const [{ data: consultas }, { data: vacunas }] = await Promise.all([
+        sb.from('consultas').select('*').eq('mascota_id', mascotaId).order('fecha', { ascending: false }),
+        sb.from('vacunas').select('*').eq('mascota_id', mascotaId).order('fecha_aplicacion', { ascending: false })
+      ]);
+
+      const hoy = new Date();
+
+      cont.innerHTML = `
+        <div class="historial-section">
+          <h3>Historial de consultas</h3>
+          ${consultas && consultas.length > 0 ? consultas.map(c => `
+            <div class="consulta-item">
+              <div class="consulta-fecha">${new Date(c.fecha).toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'})}</div>
+              <div>
+                <div class="consulta-diagnostico">${c.diagnostico || c.motivo || 'Consulta general'}</div>
+                ${c.tratamiento ? `<div class="consulta-detalle">Tratamiento: ${c.tratamiento}</div>` : ''}
+                ${c.observaciones ? `<div class="consulta-detalle">${c.observaciones}</div>` : ''}
+                <div class="consulta-badges">
+                  ${c.sede ? `<span class="badge sede">${c.sede}</span>` : ''}
+                  ${c.veterinario ? `<span class="badge vet">Dr. ${c.veterinario}</span>` : ''}
+                  ${c.peso_kg ? `<span class="badge peso">${c.peso_kg} kg</span>` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('') : '<div class="empty-state"><p>No hay consultas registradas aún.</p></div>'}
+        </div>
+
+        <div class="historial-section">
+          <h3>Plan de vacunación</h3>
+          ${vacunas && vacunas.length > 0 ? vacunas.map(v => {
+            const proxima = v.fecha_proxima ? new Date(v.fecha_proxima) : null;
+            const diasRestantes = proxima ? Math.ceil((proxima - hoy) / (1000*60*60*24)) : null;
+            const estado = diasRestantes !== null
+              ? (diasRestantes <= 30 ? `<span class="vacuna-proxima pronto">Próxima: ${proxima.toLocaleDateString('es-CO')}</span>`
+              : `<span class="vacuna-proxima ok">Al día ✓</span>`)
+              : '';
+            return `
+              <div class="vacuna-item">
+                <div>
+                  <div class="vacuna-nombre">${v.nombre_vacuna}</div>
+                  <div class="vacuna-fecha">Aplicada: ${new Date(v.fecha_aplicacion).toLocaleDateString('es-CO')}</div>
+                </div>
+                ${estado}
+              </div>`;
+          }).join('') : '<div class="empty-state"><p>No hay vacunas registradas aún.</p></div>'}
+        </div>`;
+    }
+
+    // ── AUTH STATE LISTENER ──
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user && !portalLoaded) {
+        portalLoaded = true;
+        await loadPortal(session.user);
+      } else if (event === 'SIGNED_OUT') {
+        portalLoaded = false;
+        document.getElementById('authScreen').style.display = 'flex'; showStep('step1');
+        document.getElementById('portalScreen').style.display = 'none';
+        document.getElementById('btnLogout').style.display = 'none';
+        document.getElementById('navUser').textContent = '';
+      }
+    });
+
+    // ── VERIFICAR SESION ACTIVA AL CARGAR ──
+    // Esto maneja el caso de volver al portal con sesion ya existente
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user && !portalLoaded) {
+        portalLoaded = true;
+        await loadPortal(session.user);
+      }
+    })();
+  </script>
 </body>
 </html>
