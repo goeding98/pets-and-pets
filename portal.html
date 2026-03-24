@@ -12,7 +12,7 @@
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);min-height:100vh}
     nav{background:var(--dark);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
-    nav a{text-decoration:none;cursor:pointer}
+    nav a{text-decoration:none;cursor:pointer;color:white;font-family:'Fraunces',serif;font-size:22px;font-weight:300;letter-spacing:1px}
     .nav-right{display:flex;align-items:center;gap:16px}
     .nav-user{font-size:14px;color:rgba(255,255,255,.6)}
     .btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:none;padding:8px 16px;border-radius:100px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
@@ -43,18 +43,14 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <nav>
-    <a href="https://pets-and-pets.vercel.app/" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:white;font-family:'Fraunces',serif;font-size:22px;font-weight:300;letter-spacing:1px">
-      Pets &amp; Pets
-    </a>
+    <a href="https://pets-and-pets.vercel.app/">Pets &amp; Pets</a>
     <div class="nav-right">
       <span class="nav-user" id="navUser"></span>
       <button class="btn-logout" id="btnLogout" onclick="logout()" style="display:none">Salir</button>
     </div>
   </nav>
 
-  <!-- AUTH SCREEN -->
   <div class="auth-screen" id="authScreen">
     <div class="auth-card">
       <h1 class="auth-title">Bienvenido a <em>Pets &amp; Pets</em></h1>
@@ -75,7 +71,6 @@
     </div>
   </div>
 
-  <!-- PORTAL SCREEN -->
   <div class="portal-screen" id="portalScreen">
     <div class="portal-header">
       <h1 class="greeting">Hola, <em id="userName">usuario</em></h1>
@@ -90,9 +85,8 @@
     const sb = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     function showError(msg) {
-      const el = document.getElementById('errorMsg');
-      el.textContent = msg;
-      el.style.display = 'block';
+      document.getElementById('errorMsg').textContent = msg;
+      document.getElementById('errorMsg').style.display = 'block';
     }
 
     function hideError() {
@@ -117,13 +111,34 @@
 
       const email = cedulaToEmail(cedula);
 
-      const { error } = await sb.auth.signInWithPassword({ email, password });
+      // Intentar login
+      let { data, error } = await sb.auth.signInWithPassword({ email, password });
 
+      // Si falla, hacer signup
       if (error) {
-        showError('No se pudo iniciar sesión. Verifica la cédula y la contraseña.');
-        btn.disabled = false;
-        btn.textContent = 'Entrar al portal';
-        return;
+        ({ data, error } = await sb.auth.signUp({ email, password }));
+        if (error) {
+          showError(error.message || 'Error al crear/acceder.');
+          btn.disabled = false;
+          btn.textContent = 'Entrar al portal';
+          return;
+        }
+
+        // CREAR PERFIL INMEDIATAMENTE después de signup
+        if (data.user) {
+          console.log('Creando perfil para user:', data.user.id);
+          const { error: perfilError } = await sb.from('perfiles').insert({
+            id: data.user.id,
+            cedula: cedula,
+            nombre_completo: '',
+            email: email
+          });
+          if (perfilError) {
+            console.error('Error creando perfil:', perfilError);
+          } else {
+            console.log('Perfil creado exitosamente');
+          }
+        }
       }
 
       btn.disabled = false;
@@ -142,7 +157,7 @@
 
     async function loadPortal(user) {
       try {
-        console.log('USER LOGUEADO:', user);
+        console.log('Cargando portal para user:', user.id);
 
         const { data: perfil, error: perfilError } = await sb
           .from('perfiles')
@@ -150,10 +165,10 @@
           .eq('id', user.id)
           .maybeSingle();
 
-        console.log('PERFIL:', perfil, perfilError);
+        console.log('Perfil encontrado:', perfil, perfilError);
 
-        if (perfilError) {
-          console.error('Error cargando profile:', perfilError);
+        if (!perfil) {
+          console.log('No hay perfil, mostrando empty state');
           renderEmptyState();
           return;
         }
@@ -162,24 +177,17 @@
         document.getElementById('userName').textContent = nombre;
 
         const cedula = perfil?.cedula;
-        console.log('CEDULA DEL PERFIL:', cedula);
         if (!cedula) {
           renderEmptyState();
           return;
         }
 
-        const { data: mascotas, error: mascotasError } = await sb
+        const { data: mascotas } = await sb
           .from('mascotas')
           .select('*')
           .eq('cedula_dueño', cedula);
 
-        console.log('MASCOTAS:', mascotas, mascotasError);
-
-        if (mascotasError) {
-          console.error('Error cargando mascotas:', mascotasError);
-          renderEmptyState();
-          return;
-        }
+        console.log('Mascotas encontradas:', mascotas);
 
         if (!mascotas || mascotas.length === 0) {
           renderEmptyState();
@@ -239,6 +247,7 @@
 
     sb.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
+        console.log('Usuario logueado:', session.user.id);
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('portalScreen').style.display = 'block';
         document.getElementById('btnLogout').style.display = 'block';
