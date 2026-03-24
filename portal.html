@@ -145,7 +145,7 @@
         console.log('USER LOGUEADO:', user);
 
         const { data: perfil, error: perfilError } = await sb
-          .from('profiles')
+          .from('perfiles')
           .select('*')
           .eq('id', user.id)
           .maybeSingle();
