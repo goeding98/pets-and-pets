@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mi Portal — Pets & Pets</title>
+  <title>Mi Portal — Pets &amp; Pets</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -13,7 +14,7 @@
     body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);min-height:100vh}
     nav{background:var(--dark);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
     .nav-logo{text-decoration:none;cursor:pointer;display:flex;align-items:center;gap:12px;height:100%}
-    .nav-logo img{height:32px;width:auto}
+    .nav-logo img{height:40px;width:auto;display:block}
     .nav-right{display:flex;align-items:center;gap:16px}
     .nav-user{font-size:14px;color:rgba(255,255,255,.6)}
     .btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:none;padding:8px 16px;border-radius:100px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
@@ -21,7 +22,7 @@
     .auth-screen{min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
     .auth-card{background:white;border-radius:24px;padding:48px 40px;width:100%;max-width:440px;box-shadow:0 8px 48px rgba(49,109,116,.12)}
     .auth-title{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:var(--dark);text-align:center;margin-bottom:8px}
-    .auth-title em{font-style:italic;color:var(--blue)}
+    .auth-title em{font-style:italic;color:var(--blue);}
     .auth-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:32px;line-height:1.6}
     .form-group{margin-bottom:20px}
     .form-group label{display:block;font-size:13px;font-weight:500;color:var(--dark);margin-bottom:6px}
@@ -46,9 +47,7 @@
 <body>
   <nav>
     <a href="https://pets-and-pets.vercel.app/" class="nav-logo">
-      <svg viewBox="0 0 800 200" width="120" height="30" xmlns="http://www.w3.org/2000/svg">
-        <text x="400" y="140" font-family="'Fraunces', serif" font-size="140" font-weight="300" fill="white" text-anchor="middle" letter-spacing="2">Pets &amp; Pets</text>
-      </svg>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60'%3E%3Ctext x='10' y='48' font-family='Fraunces, serif' font-size='48' font-weight='300' fill='white'%3EPets %26 Pets%3C/text%3E%3C/svg%3E" alt="Pets &amp; Pets" style="height: 40px; width: auto;"/>
     </a>
     <div class="nav-right">
       <span class="nav-user" id="navUser"></span>
@@ -58,7 +57,7 @@
 
   <div class="auth-screen" id="authScreen">
     <div class="auth-card">
-      <h1 class="auth-title">Bienvenido a <em>Pets & Pets</em></h1>
+      <h1 class="auth-title">Bienvenido a <em>Pets &amp; Pets</em></h1>
       <p class="auth-sub">Tu portal veterinario. Accede con tu cédula para ver el historial de tu mascota.</p>
       <div class="error-msg" id="errorMsg"></div>
       
@@ -183,7 +182,7 @@
       cont.innerHTML = `
         <div class="empty-state">
           <div class="icon">🐾</div>
-          <p><strong>Bienvenido a Pets & Pets</strong></p>
+          <p><strong>Bienvenido a Pets &amp; Pets</strong></p>
           <p>Aún no hay mascotas registradas en tu perfil.<br/>
           Acércate a nuestra veterinaria para recibir tu primera atención y vincular tu historial clínico.</p>
           <a href="https://wa.me/576012345678" class="btn-whatsapp">
