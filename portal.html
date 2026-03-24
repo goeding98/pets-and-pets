@@ -127,16 +127,25 @@
         // CREAR PERFIL INMEDIATAMENTE después de signup
         if (data.user) {
           console.log('Creando perfil para user:', data.user.id);
-          const { error: perfilError } = await sb.from('perfiles').insert({
+          console.log('Datos:', { id: data.user.id, cedula, nombre_completo: '', email });
+          
+          const { data: insertData, error: perfilError } = await sb.from('perfiles').insert({
             id: data.user.id,
             cedula: cedula,
             nombre_completo: '',
             email: email
           });
+          
+          console.log('Resultado insert - data:', insertData);
+          console.log('Resultado insert - error:', perfilError);
+          
           if (perfilError) {
-            console.error('Error creando perfil:', perfilError);
+            console.error('❌ ERROR CREANDO PERFIL');
+            console.error('Code:', perfilError.code);
+            console.error('Message:', perfilError.message);
+            console.error('Details:', perfilError.details);
           } else {
-            console.log('Perfil creado exitosamente');
+            console.log('✅ Perfil creado exitosamente');
           }
         }
       }
