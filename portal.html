@@ -111,10 +111,8 @@
 
       const email = cedulaToEmail(cedula);
 
-      // Intentar login
       let { data, error } = await sb.auth.signInWithPassword({ email, password });
 
-      // Si falla, hacer signup
       if (error) {
         ({ data, error } = await sb.auth.signUp({ email, password }));
         if (error) {
@@ -123,30 +121,22 @@
           btn.textContent = 'Entrar al portal';
           return;
         }
+      }
 
-        // CREAR PERFIL INMEDIATAMENTE después de signup
-        if (data.user) {
-          console.log('Creando perfil para user:', data.user.id);
-          console.log('Datos:', { id: data.user.id, cedula, nombre_completo: '', email });
-          
-          const { data: insertData, error: perfilError } = await sb.from('perfiles').insert({
-            id: data.user.id,
-            cedula: cedula,
-            nombre_completo: '',
-            email: email
-          });
-          
-          console.log('Resultado insert - data:', insertData);
-          console.log('Resultado insert - error:', perfilError);
-          
-          if (perfilError) {
-            console.error('❌ ERROR CREANDO PERFIL');
-            console.error('Code:', perfilError.code);
-            console.error('Message:', perfilError.message);
-            console.error('Details:', perfilError.details);
-          } else {
-            console.log('✅ Perfil creado exitosamente');
-          }
+      // UPSERT PERFIL - Se ejecuta SIEMPRE (login o signup)
+      if (data.user) {
+        console.log('Sincronizando perfil...');
+        const { error: perfilError } = await sb.from('perfiles').upsert({
+          id: data.user.id,
+          cedula: cedula,
+          nombre_completo: '',
+          email: email
+        });
+        
+        if (perfilError) {
+          console.error('ERROR:', perfilError);
+        } else {
+          console.log('Perfil OK');
         }
       }
 
@@ -165,47 +155,28 @@
     }
 
     async function loadPortal(user) {
-      try {
-        console.log('Cargando portal para user:', user.id);
+      const { data: perfil } = await sb.from('perfiles').select('*').eq('id', user.id).maybeSingle();
 
-        const { data: perfil, error: perfilError } = await sb
-          .from('perfiles')
-          .select('*')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        console.log('Perfil encontrado:', perfil, perfilError);
-
-        if (!perfil) {
-          console.log('No hay perfil, mostrando empty state');
-          renderEmptyState();
-          return;
-        }
-
-        const nombre = perfil?.nombre_completo?.trim()?.split(' ')[0] || 'usuario';
-        document.getElementById('userName').textContent = nombre;
-
-        const cedula = perfil?.cedula;
-        if (!cedula) {
-          renderEmptyState();
-          return;
-        }
-
-        const { data: mascotas } = await sb
-          .from('mascotas')
-          .select('*')
-          .eq('cedula_dueño', cedula);
-
-        console.log('Mascotas encontradas:', mascotas);
-
-        if (!mascotas || mascotas.length === 0) {
-          renderEmptyState();
-        } else {
-          renderPortal(mascotas);
-        }
-      } catch (e) {
-        console.error('Error cargando portal:', e);
+      if (!perfil) {
         renderEmptyState();
+        return;
+      }
+
+      const nombre = perfil?.nombre_completo?.trim()?.split(' ')[0] || 'usuario';
+      document.getElementById('userName').textContent = nombre;
+
+      const cedula = perfil?.cedula;
+      if (!cedula) {
+        renderEmptyState();
+        return;
+      }
+
+      const { data: mascotas } = await sb.from('mascotas').select('*').eq('cedula_dueño', cedula);
+
+      if (!mascotas || mascotas.length === 0) {
+        renderEmptyState();
+      } else {
+        renderPortal(mascotas);
       }
     }
 
@@ -231,7 +202,7 @@
         <p style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6b8a8e;margin-bottom:20px">Tus mascotas</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px">
           ${mascotas.map(m => `
-            <div style="background:white;border-radius:20px;border:1px solid rgba(49,109,116,.1);overflow:hidden;cursor:pointer;transition:transform .3s,box-shadow .3s" id="card-${m.id}">
+            <div style="background:white;border-radius:20px;border:1px solid rgba(49,109,116,.1);overflow:hidden">
               <div style="background:linear-gradient(135deg,#316d74 0%,#1c3b3f 100%);padding:24px;display:flex;align-items:center;gap:16px">
                 <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px">${emojiMap[m.especie] || '🐾'}</div>
                 <div>
@@ -256,7 +227,6 @@
 
     sb.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        console.log('Usuario logueado:', session.user.id);
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('portalScreen').style.display = 'block';
         document.getElementById('btnLogout').style.display = 'block';
